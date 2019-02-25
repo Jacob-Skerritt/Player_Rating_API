@@ -5,6 +5,8 @@ class substitution {
     // database connection and table name
     private $conn;
     private $table_name = "matches_players";
+    
+   
     // object properties
     public $match_id;
     public $player_id;
