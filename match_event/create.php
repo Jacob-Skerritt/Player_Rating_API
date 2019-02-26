@@ -9,49 +9,50 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // get database connection
 include_once '../config/database.php';
  
-// instantiate player object
-include_once '../objects/player.php';
+// instantiate match_event object
+include_once '../objects/match_event.php';
  
 $database = new Database();
 $db = $database->getConnection();
  
-$player = new Player($db);
+$match_event = new Match_Event($db);
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
  
 // make sure data is not empty
 if(
-    !empty($data->player_name) &&
-    !empty($data->player_no) &&
-    !empty($data->player_image) &&
-    !empty($data->team_id) 
+    !empty($data->match_id) &&
+    !empty($data->player_id) &&
+    !empty($data->team_id) &&
+    !empty($data->event_id)
 ){
  
-    // set player property values
-    $player->player_name = $data->player_name;
-    $player->player_no = $data->player_no;
-    $player->player_image = $data->player_image;
-    $player->team_id = $data->team_id;
+    // set match_event  property values
+    $match_event->match_id = $data->match_id;
+    $match_event->player_id = $data->player_id;
+    $match_event->event_id = $data->event_id;
+    $match_event->team_id = $data->team_id;
+
  
-    // create the player
-    if($player->create()){
+    // create the match_event
+    if($match_event->create()){
  
         // set response code - 201 created
         http_response_code(201);
  
         // tell the user
-        echo json_encode(array("message" => "Player was created."));
+        echo json_encode(array("message" => "match_event was created."));
     }
  
-    // if unable to create the player, tell the user
+    // if unable to create the match_event, tell the user
     else{
  
         // set response code - 503 service unavailable
         http_response_code(503);
  
         // tell the user
-        echo json_encode(array("message" => "Unable to create player."));
+        echo json_encode(array("message" => "Unable to create match_event."));
     }
 }
  
@@ -62,6 +63,6 @@ else{
     http_response_code(400);
  
     // tell the user
-    echo json_encode(array("message" => "Unable to create player. Data is incomplete."));
+    echo json_encode(array("message" => "Unable to create match_event. Data is incomplete."));
 }
 ?>

@@ -7,29 +7,29 @@ header("Content-Type: application/json; charset=UTF-8");
 include_once '../config/core.php';
 include_once '../shared/utilities.php';
 include_once '../config/database.php';
-include_once '../objects/player.php';
+include_once '../objects/match_event.php';
  
 // utilities
 $utilities = new Utilities();
  
-// instantiate database and player object
+// instantiate database and match_event object
 $database = new Database();
 $db = $database->getConnection();
  
 // initialize object
-$player = new Player($db);
+$match_event = new match_event($db);
  
-// query players
-$stmt = $player->readPaging($from_record_num, $records_per_page);
+// query match_events
+$stmt = $match_event->readPaging($from_record_num, $records_per_page);
 $num = $stmt->rowCount();
  
 // check if more than 0 record found
 if($num>0){
  
-    // players array
-    $players_arr=array();
-    $players_arr["records"]=array();
-    $players_arr["paging"]=array();
+    // match_events array
+    $match_events_arr=array();
+    $match_events_arr["records"]=array();
+    $match_events_arr["paging"]=array();
  
     // retrieve our table contents
     // fetch() is faster than fetchAll()
@@ -40,29 +40,30 @@ if($num>0){
         // just $name only
         extract($row);
  
-        $player_item=array(
+        $match_event_item=array(
             "id" => $id,
-            "player_name" => $player_name,
-            "player_no" => $player_no,
-            "player_image" => $player_image,
-            "team_name" => $team_name
+            "match_id" => $match_id,
+            "player_id" => $player_id,
+            "event_id" => $event_id,
+            "team_id" => $team_id,
+            "date_time" =>$date_time
         );
  
-        array_push($players_arr["records"], $player_item);
+        array_push($match_events_arr["records"], $match_event_item);
     }
  
  
     // include paging
-    $total_rows=$player->count();
-    $page_url="{$home_url}player/read_paging.php?";
+    $total_rows=$match_event->count();
+    $page_url="{$home_url}match_event/read_paging.php?";
     $paging=$utilities->getPaging($page, $total_rows, $records_per_page, $page_url);
-    $players_arr["paging"]=$paging;
+    $match_events_arr["paging"]=$paging;
  
     // set response code - 200 OK
     http_response_code(200);
  
     // make it json format
-    echo json_encode($players_arr);
+    echo json_encode($match_events_arr);
 }
  
 else{
@@ -70,9 +71,9 @@ else{
     // set response code - 404 Not found
     http_response_code(404);
  
-    // tell the user players does not exist
+    // tell the user match_events does not exist
     echo json_encode(
-        array("message" => "No players found.")
+        array("message" => "No match_events found.")
     );
 }
 ?>

@@ -63,7 +63,7 @@ if($num>0){
             "id" => $id,
             "player_name" => $player_name,
             "player_no" => $player_no,
-            "player_date_of_birth" => $player_date_of_brith,
+            "player_image" => $player_image,
             "team_name" => $team_name
         );
  

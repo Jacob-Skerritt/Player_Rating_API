@@ -1,32 +1,40 @@
 <?php
 
-class Player {
+class Match_event{
 
     // database connection and table name
     private $conn;
-    private $table_name = "players";
+    private $table_name = "matches_events";
     // object properties
     public $id;
-    public $player_name;
-    public $player_no;
-    public $player_image;
+    public $match_id;
+    public $event_id;
+    public $player_id;
     public $team_id;
+    public $date_time;
+
     // constructor with $db as database connection
     public function __construct($db) {
         $this->conn = $db;
     }
 
-    // read playerss
+    // read matches_events
     function read() {
 
         // select all query
         $query = "SELECT
-                t.team_name as team_name, p.id, p.player_name, p.player_no, p.player_image
+               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.date_time
             FROM
-                " . $this->table_name . " p
+                " . $this->table_name . " me
                 LEFT JOIN
                     teams t
-                        ON p.team_id = t.id
+                        ON me.team_id = t.id
+                LEFT JOIN
+                    players p
+                        ON me.player_id = p.id
+                LEFT JOIN
+                    events e
+                        ON me.event_id = e.id
             ORDER BY
                 team_name DESC";
         // prepare query statement
@@ -37,31 +45,30 @@ class Player {
 
         return $stmt;
     }
+    
 
-// create player
+// create match_event
     function create() {
 
         // query to insert record
         $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-                player_name=:player_name, player_no=:player_no, player_image=:player_image, team_id=:team_id";
+                match_id=:match_id, event_id=:event_id, player_id=:player_id, team_id=:team_id";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->player_name = htmlspecialchars(strip_tags($this->player_name));
-        $this->player_no = htmlspecialchars(strip_tags($this->player_no));
-        $this->player_image = htmlspecialchars(strip_tags($this->player_image));
+        $this->match_id = htmlspecialchars(strip_tags($this->match_id));
+        $this->event_id = htmlspecialchars(strip_tags($this->event_id));
+        $this->player_id = htmlspecialchars(strip_tags($this->player_id));
         $this->team_id = htmlspecialchars(strip_tags($this->team_id));
-
         // bind values
-        $stmt->bindParam(":player_name", $this->player_name);
-        $stmt->bindParam(":player_no", $this->player_no);
-        $stmt->bindParam(":player_image", $this->player_image);
+        $stmt->bindParam(":match_id", $this->match_id);
+        $stmt->bindParam(":event_id", $this->event_id);
+        $stmt->bindParam(":player_id", $this->player_id);
         $stmt->bindParam(":team_id", $this->team_id);
-
 
         // execute query
         if ($stmt->execute()) {
@@ -71,19 +78,25 @@ class Player {
         return false;
     }
     
-    // used when filling up the update players form
+    // used when filling up the update matches_events form
 function readOne(){
  
     // query to read single record
         $query = "SELECT
-                t.team_name as team_name, p.id, p.player_name, p.player_no, p.player_image
+               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.date_time
             FROM
-                " . $this->table_name . " p
+                " . $this->table_name . " me
                 LEFT JOIN
                     teams t
-                        ON p.team_id = t.id
+                        ON me.team_id = t.id
+                LEFT JOIN
+                    players p
+                        ON me.player_id = p.id
+                LEFT JOIN
+                    events e
+                        ON me.event_id = e.id
             WHERE
-                p.id = ?
+                me.id = ?
             LIMIT
                 0,1";
  
@@ -100,41 +113,44 @@ function readOne(){
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
  
     // set values to object properties
-    $this->team_name = $row['team_name'];
-    $this->player_name = $row['player_name'];
-    $this->player_no = $row['player_no'];
-    $this->player_image = $row['player_image'];
+    $this->match_id = $row['match_id'];
+    $this->event_id = $row['event'];
+    $this->player_id = $row['player_name'];
+    $this->team_id = $row['team_name'];
+    $this->date_time = $row['date_time'];
+
 }
 
-// update the players
-function update(){
+// update the matches_events
+function update($match_to_change){
     // update query
     $query = 
             "UPDATE
             ". $this->table_name ."
             SET
-            player_name = :player_name,
-            player_no = :player_no,
-            player_image = :player_image,
+            match_id = :match_id,
+            event_id = :event_id,
+            player_id = :player_id,
             team_id = :team_id
             WHERE
-            id = :id";
+            id = :id AND match_id =:match_to_change";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);
  
     // sanitize
-    $this->player_name=htmlspecialchars(strip_tags($this->player_name));
-    $this->player_no=htmlspecialchars(strip_tags($this->player_no));
-    $this->player_image=htmlspecialchars(strip_tags($this->player_image));
-    $this->team_id=htmlspecialchars(strip_tags($this->team_id));
+    $this->match_id=htmlspecialchars(strip_tags($this->match_id));
+    $this->event_id=htmlspecialchars(strip_tags($this->event_id));
+    $this->player_id=htmlspecialchars(strip_tags($this->player_id));
+    $this->team_id = htmlspecialchars(strip_tags($this->team_id));
     $this->id=htmlspecialchars(strip_tags($this->id));
     // bind new values
-    $stmt->bindParam(':player_name', $this->player_name);
-    $stmt->bindParam(':player_no', $this->player_no);
-    $stmt->bindParam(':player_image', $this->player_image);
+    $stmt->bindParam(':match_id', $this->match_id);
+    $stmt->bindParam(':event_id', $this->event_id);
+    $stmt->bindParam(':player_id', $this->player_id);
     $stmt->bindParam(':team_id', $this->team_id);
     $stmt->bindParam(':id', $this->id);
+    $stmt->bindParam(':match_to_change', $match_to_change);
     
     // execute the query
     if($stmt->execute()){
@@ -143,7 +159,7 @@ function update(){
     return false;
 }
 
-// delete the player
+// delete the match_event
 function delete(){
  
     // delete query
@@ -167,31 +183,37 @@ function delete(){
      
 }
 
-// search players
+// search match_events
 function search(){
  
     // select all query
         $query = "SELECT
-                t.team_name as team_name, p.id, p.player_name, p.player_no, p.player_image
+               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.date_time
             FROM
-                " . $this->table_name . " p
+                " . $this->table_name . " me
                 LEFT JOIN
                     teams t
-                        ON p.team_id = t.id
+                        ON me.team_id = t.id
+                LEFT JOIN
+                    players p
+                        ON me.player_id = p.id
+                LEFT JOIN
+                    events e
+                        ON me.event_id = e.id
             WHERE
-                p.player_name LIKE ? OR team_name LIKE ? OR player_no = ?
+                me.match_id = ? OR me.player_id = ? OR me.event_id = ?
             ORDER BY
-                team_name DESC";
+                match_id DESC";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);
  
-    // sanitize
+
  
     // bind
-    $stmt->bindParam(1, $this->player_name);
-    $stmt->bindParam(2, $this->team_name);
-    $stmt->bindParam(3, $this->player_no);
+    $stmt->bindParam(1, $this->match_id);
+    $stmt->bindParam(2, $this->player_id);
+    $stmt->bindParam(3,$this->event_id);
 
  
     // execute query
@@ -200,18 +222,24 @@ function search(){
     return $stmt;
 }
 
-// read playerss with pagination
+// read matches_events with pagination
 public function readPaging($from_record_num, $records_per_page){
  
     // select query
         $query = "SELECT
-                t.team_name as team_name, p.id, p.player_name, p.player_no, p.player_image
+               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.date_time
             FROM
-                " . $this->table_name . " p
+                " . $this->table_name . " me
                 LEFT JOIN
                     teams t
-                        ON p.team_id = t.id
-            ORDER BY team_name DESC
+                        ON me.team_id = t.id
+                LEFT JOIN
+                    players p
+                        ON me.player_id = p.id
+                LEFT JOIN
+                    events e
+                        ON me.event_id = e.id
+            ORDER BY match_id DESC
             LIMIT ?, ?";
  
     // prepare query statement
@@ -228,7 +256,7 @@ public function readPaging($from_record_num, $records_per_page){
     return $stmt;
 }
 
-// used for paging players
+// used for paging matches_events
 public function count(){
     $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name . "";
  

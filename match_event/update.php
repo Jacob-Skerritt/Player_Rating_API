@@ -8,45 +8,43 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/player.php';
+include_once '../objects/match_event.php';
  
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
-// prepare player object
-$player = new Player($db);
+// prepare match_event object
+$match_event = new match_event($db);
  
-// get id of player to be edited
+// get id of match_event to be edited
 $data = json_decode(file_get_contents("php://input"));
  
-// set ID property of player to be edited
-$player->id = $data->id;
+// set ID property of match_event to be edited
+$match_event->id = $data->id;
+$match_event->match_id = $data->match_id;
+$match_event->player_id = $data->player_id;
+$match_event->event_id = $data->event_id;
+$match_event->team_id = $data->team_id;
+$match_to_change = $data->match_to_change;
  
-
-    // set player property values
-    $player->player_name = $data->player_name;
-    $player->player_no = $data->player_no;
-    $player->player_image = $data->player_image;
-    $player->team_id = $data->team_id;
- 
-// update the player
-if($player->update()){
+// update the match_event
+if($match_event->update($match_to_change)){
  
     // set response code - 200 ok
     http_response_code(200);
  
     // tell the user
-    echo json_encode(array("message" => "Player was updated."));
+    echo json_encode(array("message" => "match_event was updated."));
 }
  
-// if unable to update the player, tell the user
+// if unable to update the match_event, tell the user
 else{
  
     // set response code - 503 service unavailable
     http_response_code(503);
  
     // tell the user
-    echo json_encode(array("message" => "Unable to update player."));
+    echo json_encode(array("message" => "Unable to update match_event."));
 }
 ?>
