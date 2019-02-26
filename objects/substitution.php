@@ -24,15 +24,18 @@ class Substitution {
 
         // select all query
         $query = "SELECT
-                t.team_name as team_name,p.player_name as sub_player, p.player_name as starting_player, s.id, s.match_id, s.date_time
+                t.team_name as team_name,p.player_name as sub_player, p2.player_name as starting_player, s.id, s.match_id, s.date_time
             FROM
-                " . $this->table_name . " s
+               " . $this->table_name . " s
                     LEFT JOIN 
                         teams t 
                             ON s.team_id = t.id
                     LEFT JOIN
                         players p
-                            ON s.sub_player_id = p.id OR s.starting_player_id = p.id
+                            ON s.sub_player_id = p.id 
+                    LEFT JOIN 
+                        players p2 
+                            on s.starting_player_id = p2.id
             ORDER BY
                 match_id DESC";
         // prepare query statement
@@ -82,17 +85,19 @@ function readOne(){
  
     // query to read single record
         $query = "SELECT
-                t.team_name as team_name,p.player_name as sub_player, p.player_name as starting_player, s.id, s.match_id, s.date_time
+                t.team_name as team_name,p.player_name as sub_player, p2.player_name as starting_player, s.id, s.match_id, s.date_time
             FROM
-                " . $this->table_name . " s
+               " . $this->table_name . " s
                     LEFT JOIN 
                         teams t 
                             ON s.team_id = t.id
                     LEFT JOIN
                         players p
-                            ON s.sub_player_id = p.id OR s.starting_player_id = p.id
-            ORDER BY
-                match_id DESC
+                            ON s.sub_player_id = p.id 
+                    LEFT JOIN 
+                        players p2 
+                            on s.starting_player_id = p2.id
+
             WHERE
                 id = ?
             LIMIT
@@ -185,18 +190,21 @@ function search(){
  
     // select all query
         $query = "SELECT
-                t.team_name as team_name,p.player_name as sub_player, p.player_name as starting_player, s.id, s.match_id, s.date_time
+                t.team_name as team_name,p.player_name as sub_player, p2.player_name as starting_player, s.id, s.match_id, s.date_time
             FROM
-                " . $this->table_name . " s
+               " . $this->table_name . " s
                     LEFT JOIN 
                         teams t 
                             ON s.team_id = t.id
                     LEFT JOIN
                         players p
-                            ON s.sub_player_id = p.id OR s.starting_player_id = p.id
+                            ON s.sub_player_id = p.id 
+                    LEFT JOIN 
+                        players p2 
+                            on s.starting_player_id = p2.id
             WHERE
-                match_id  = ? 
-            ORDER BY
+                match_id  = ?
+                            ORDER BY
                 match_id DESC";
  
     // prepare query statement

@@ -42,9 +42,9 @@ if($num>0){
         $substitution_item=array(
             "id" => $id,
             "match_id" => $match_id,
-            "sub_player_id" => $sub_player_id,
-            "starting_player_id" => $starting_player_id,
-            "team_id" => $team_id,
+            "sub_player" => $sub_player,
+            "starting_player" => $starting_player,
+            "team_name" => $team_name,
             "date_time" =>$date_time
         );
  
