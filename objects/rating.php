@@ -18,6 +18,21 @@ class Rating {
     public function __construct($db) {
         $this->conn = $db;
     }
+    
+    function get_average_ratings(){
+        $query = "SELECT player_id, rating, user_id FROM
+                " . $this->table_name . "
+                    Where
+                        match_id = ?
+                    ORDER BY 
+                        player_id";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        $stmt->execute();
+                
+                return $stmt;
+    }
 
     // read ratings
     function read() {
