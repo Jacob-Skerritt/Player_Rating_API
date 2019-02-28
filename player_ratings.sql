@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2019 at 11:13 AM
+-- Generation Time: Feb 28, 2019 at 02:14 PM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -198,6 +198,42 @@ INSERT INTO `players` (`id`, `player_name`, `player_no`, `player_image`, `team_i
 --
 
 CREATE TABLE `ratings` (
+  `match_id` int(11) NOT NULL,
+  `player_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `rating` int(2) NOT NULL,
+  `date_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`match_id`, `player_id`, `user_id`, `rating`, `date_time`) VALUES
+(1, 7, 3, 4, '2019-02-28 12:53:36'),
+(1, 7, 5, 2, '2019-02-28 12:54:16'),
+(1, 7, 6, 1, '2019-02-28 13:09:47'),
+(1, 25, 5, 9, '2019-02-28 12:53:57'),
+(1, 26, 4, 5, '2019-02-28 12:53:36'),
+(1, 42, 6, 2, '2019-02-28 12:54:16');
+
+--
+-- Triggers `ratings`
+--
+DELIMITER $$
+CREATE TRIGGER `ratings_history_management` BEFORE DELETE ON `ratings` FOR EACH ROW BEGIN
+INSERT INTO ratings_history VALUES (null, old.match_id, old.player_id, old.user_id, old.rating, old.date_time);
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_history`
+--
+
+CREATE TABLE `ratings_history` (
   `id` int(11) NOT NULL,
   `match_id` int(11) NOT NULL,
   `player_id` int(11) NOT NULL,
@@ -207,18 +243,12 @@ CREATE TABLE `ratings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `ratings`
+-- Dumping data for table `ratings_history`
 --
 
-INSERT INTO `ratings` (`id`, `match_id`, `player_id`, `rating`, `user_id`, `date_time`) VALUES
-(1, 1, 7, 8, 6, '2019-02-26 22:48:09'),
-(2, 1, 26, 3, 6, '2019-02-26 22:48:09'),
-(3, 1, 25, 5, 6, '2019-02-26 22:49:15'),
-(4, 1, 16, 4, 6, '2019-02-26 22:49:15'),
-(5, 1, 7, 6, 3, '2019-02-26 23:03:56'),
-(6, 1, 26, 2, 3, '2019-02-26 23:03:56'),
-(7, 1, 25, 7, 4, '2019-02-26 23:04:48'),
-(8, 1, 16, 9, 4, '2019-02-26 23:04:48');
+INSERT INTO `ratings_history` (`id`, `match_id`, `player_id`, `rating`, `user_id`, `date_time`) VALUES
+(2, 1, 25, 3, 2, '2019-02-28 11:37:17'),
+(3, 1, 6, 2, 5, '2019-02-28 12:57:17');
 
 -- --------------------------------------------------------
 
@@ -342,6 +372,14 @@ ALTER TABLE `players`
 -- Indexes for table `ratings`
 --
 ALTER TABLE `ratings`
+  ADD PRIMARY KEY (`match_id`,`player_id`,`user_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `player_id` (`player_id`);
+
+--
+-- Indexes for table `ratings_history`
+--
+ALTER TABLE `ratings_history`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `match_id` (`match_id`),
@@ -398,10 +436,10 @@ ALTER TABLE `players`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
--- AUTO_INCREMENT for table `ratings`
+-- AUTO_INCREMENT for table `ratings_history`
 --
-ALTER TABLE `ratings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+ALTER TABLE `ratings_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `substitutions`
@@ -462,6 +500,14 @@ ALTER TABLE `ratings`
   ADD CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`match_id`) REFERENCES `matches` (`id`),
   ADD CONSTRAINT `ratings_ibfk_3` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`);
+
+--
+-- Constraints for table `ratings_history`
+--
+ALTER TABLE `ratings_history`
+  ADD CONSTRAINT `ratings_history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `ratings_history_ibfk_2` FOREIGN KEY (`match_id`) REFERENCES `matches` (`id`),
+  ADD CONSTRAINT `ratings_history_ibfk_3` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`);
 
 --
 -- Constraints for table `substitutions`
