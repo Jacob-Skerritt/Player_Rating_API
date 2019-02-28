@@ -166,13 +166,37 @@ class Rating {
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->id = htmlspecialchars(strip_tags($this->id));
+        $this->match_id = htmlspecialchars(strip_tags($this->match_id));
+        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+        $this->player_id = htmlspecialchars(strip_tags($this->player_id));
 
         // bind id of record to delete
         $stmt->bindParam(1, $this->match_id);
         $stmt->bindParam(2, $this->user_id);
         $stmt->bindParam(3, $this->player_id);
 
+
+        // execute query
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
+    }
+    
+        function end_of_game_processing() {
+
+        // delete query
+        $query = "DELETE FROM " . $this->table_name . " WHERE match_id = ?";
+
+        // prepare query
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+        $this->match_id = htmlspecialchars(strip_tags($this->match_id));
+
+        // bind id of record to delete
+        $stmt->bindParam(1, $this->match_id);
 
         // execute query
         if ($stmt->execute()) {

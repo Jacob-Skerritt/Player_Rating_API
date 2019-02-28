@@ -42,12 +42,12 @@ if ($num > 0) {
     
         $count = 0;
     foreach ($array as $players => $player_ratings) {
-        // $color_fruit is an array
+       
         foreach ($player_ratings as $each_rating) {
             $count += $each_rating;
         }
 
-        print  " " . $count/sizeOf($array[$players]) . "<br>";
+
        
         
             
