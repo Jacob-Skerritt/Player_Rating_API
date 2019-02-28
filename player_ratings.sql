@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2019 at 02:14 PM
+-- Generation Time: Feb 28, 2019 at 10:23 PM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -210,19 +210,14 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`match_id`, `player_id`, `user_id`, `rating`, `date_time`) VALUES
-(1, 7, 3, 4, '2019-02-28 12:53:36'),
-(1, 7, 5, 2, '2019-02-28 12:54:16'),
-(1, 7, 6, 1, '2019-02-28 13:09:47'),
-(1, 25, 5, 9, '2019-02-28 12:53:57'),
-(1, 26, 4, 5, '2019-02-28 12:53:36'),
-(1, 42, 6, 2, '2019-02-28 12:54:16');
+(1, 7, 2, 10, '2019-02-28 21:19:26');
 
 --
 -- Triggers `ratings`
 --
 DELIMITER $$
 CREATE TRIGGER `ratings_history_management` BEFORE DELETE ON `ratings` FOR EACH ROW BEGIN
-INSERT INTO ratings_history VALUES (null, old.match_id, old.player_id, old.user_id, old.rating, old.date_time);
+INSERT INTO ratings_history VALUES (null, old.match_id, old.player_id, old.rating, old.user_id, old.date_time);
 END
 $$
 DELIMITER ;
@@ -247,8 +242,12 @@ CREATE TABLE `ratings_history` (
 --
 
 INSERT INTO `ratings_history` (`id`, `match_id`, `player_id`, `rating`, `user_id`, `date_time`) VALUES
-(2, 1, 25, 3, 2, '2019-02-28 11:37:17'),
-(3, 1, 6, 2, 5, '2019-02-28 12:57:17');
+(34, 1, 7, 1, 6, '2019-02-28 13:09:47'),
+(35, 1, 7, 2, 2, '2019-02-28 21:14:41'),
+(36, 1, 16, 2, 6, '2019-02-28 21:15:12'),
+(37, 1, 25, 4, 5, '2019-02-28 21:14:41'),
+(38, 1, 42, 6, 6, '2019-02-28 21:15:12'),
+(39, 1, 7, 2, 2, '2019-02-28 21:18:15');
 
 -- --------------------------------------------------------
 
@@ -439,7 +438,7 @@ ALTER TABLE `players`
 -- AUTO_INCREMENT for table `ratings_history`
 --
 ALTER TABLE `ratings_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `substitutions`
