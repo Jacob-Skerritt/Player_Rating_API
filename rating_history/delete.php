@@ -8,22 +8,20 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
  
 // include database and object file
 include_once '../config/database.php';
-include_once '../objects/rating.php';
+include_once '../objects/rating_history.php';
  
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
 // prepare rating object
-$rating = new Rating($db);
+$rating = new Rating_History($db);
  
 // get rating id
 $data = json_decode(file_get_contents("php://input"));
  
 // set rating id to be deleted
-$rating->match_id = $data->match_id;
-$rating->user_id = $data->user_id;
-$rating->player_id = $data->player_id;
+$rating->id = $data->id;
  
 // delete the rating
 if($rating->delete()){

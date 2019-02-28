@@ -6,20 +6,24 @@ header("Content-Type: application/json; charset=UTF-8");
 // include database and object files
 include_once '../config/core.php';
 include_once '../config/database.php';
-include_once '../objects/rating.php';
+include_once '../objects/rating_history.php';
  
 // instantiate database and rating object
 $database = new Database();
 $db = $database->getConnection();
  
 // initialize object
-$ratings = new Rating($db);
+$ratings = new Rating_History($db);
  
 // get keywords
 $data = json_decode(file_get_contents("php://input"));
 
     $ratings->match_id = $data->match_id;
     $ratings->player_id = $data->player_id;
+    echo $ratings->match_id;
+    echo " ";
+    echo  $ratings->player_id;
+
 // query ratings
 $stmt = $ratings->search();
 $num = $stmt->rowCount();
@@ -41,6 +45,7 @@ if($num>0){
         extract($row);
  
         $rating_item=array(
+            "id" => $id,
             "match_id" => $match_id,
             "player_id" => $player_id,
             "rating" => $rating,

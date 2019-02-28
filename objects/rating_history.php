@@ -1,22 +1,40 @@
 <?php
 
-class Match_Team {
+class Rating_History {
 
     // database connection and table name
     private $conn;
-    private $table_name = "matches_teams";
+    private $table_name = "ratings_history";
     // object properties
+    public $id;
     public $match_id;
-    public $team_id;
-    public $formation;
+    public $player_id;
+    public $rating;
+    public $user_id;
+    public $date_time;
 
 
     // constructor with $db as database connection
     public function __construct($db) {
         $this->conn = $db;
     }
+    
+    function get_average_ratings(){
+        $query = "SELECT player_id, rating, user_id FROM
+                " . $this->table_name . "
+                    Where
+                        match_id = ?
+                    ORDER BY 
+                        player_id";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        $stmt->execute();
+                
+                return $stmt;
+    }
 
-    // read matches_teams
+    // read ratings
     function read() {
 
         // select all query
@@ -36,27 +54,28 @@ class Match_Team {
     }
     
 
-// create matches_team
+// create rating
     function create() {
 
         // query to insert record
         $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-                match_id=:match_id,team_id=:team_id, formation=:formation";
+                match_id=:match_id, player_id=:player_id, rating=:rating, user_id=:user_id";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
 
         // sanitize
         $this->match_id = htmlspecialchars(strip_tags($this->match_id));
-        $this->team_id = htmlspecialchars(strip_tags($this->team_id));
-        $this->formation = htmlspecialchars(strip_tags($this->formation));
-
+        $this->player_id = htmlspecialchars(strip_tags($this->player_id));
+        $this->rating = htmlspecialchars(strip_tags($this->rating));
+        $this->user_id = html_entity_decode(strip_tags($this->user_id));
         // bind values
         $stmt->bindParam(":match_id", $this->match_id);
-        $stmt->bindParam(":team_id", $this->team_id);
-        $stmt->bindParam(":formation", $this->formation);
+        $stmt->bindParam(":player_id", $this->player_id);
+        $stmt->bindParam(":rating", $this->rating);
+        $stmt->bindParam(":user_id", $this->user_id);
 
         // execute query
         if ($stmt->execute()) {
@@ -66,7 +85,7 @@ class Match_Team {
         return false;
     }
     
-    // used when filling up the update matches_teams form
+   
 function readOne(){
  
     // query to read single record
@@ -75,7 +94,7 @@ function readOne(){
             FROM
                 " . $this->table_name . " 
             WHERE
-                match_id = ? AND team_id = ?
+                id = ?
             LIMIT
                 0,1";
  
@@ -83,8 +102,7 @@ function readOne(){
     $stmt = $this->conn->prepare( $query );
  
     // bind id of players to be updated
-    $stmt->bindParam(1, $this->match_id);
-    $stmt->bindParam(2, $this->team_id);
+    $stmt->bindParam(1, $this->id);
  
     // execute query
     $stmt->execute();
@@ -93,37 +111,43 @@ function readOne(){
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
  
     // set values to object properties
-    $this->team_id = $row['team_id'];
-    $this->formation = $row['formation'];
+    $this->match_id = $row['match_id'];
+    $this->player_id = $row['player_id'];
+    $this->rating = $row['rating'];
+    $this->user_id =$row['user_id'];
+    $this->date_time =$row['date_time'];
 
 }
 
-// update the matches_teams
-function update($match_id_to_change,$team_id_to_change){
+// update the ratings
+function update(){
     // update query
     $query = 
             "UPDATE
             ". $this->table_name ."
             SET
             match_id = :match_id,
-            team_id = :team_id,
-            formation = :formation
+            player_id = :player_id,
+            rating = :rating,
+            user_id =:user_id
             WHERE
-            match_id = :match_id_to_change AND team_id=:team_id_to_change";
+            id = :id";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);
  
     // sanitize
-    $this->team_id=htmlspecialchars(strip_tags($this->team_id));
-    $this->formation=htmlspecialchars(strip_tags($this->formation));
     $this->match_id=htmlspecialchars(strip_tags($this->match_id));
+    $this->player_id=htmlspecialchars(strip_tags($this->player_id));
+    $this->rating=htmlspecialchars(strip_tags($this->rating));
+    $this->user_id =htmlspecialchars(strip_tags($this->user_id));
+    $this->id=htmlspecialchars(strip_tags($this->id));
     // bind new values
-    $stmt->bindParam(':team_id', $this->team_id);
-    $stmt->bindParam(':formation', $this->formation);
     $stmt->bindParam(':match_id', $this->match_id);
-    $stmt->bindParam(':match_id_to_change', $match_id_to_change);
-    $stmt->bindParam(':team_id_to_change', $team_id_to_change);
+    $stmt->bindParam(':player_id', $this->player_id);
+    $stmt->bindParam(':rating', $this->rating);
+    $stmt->bindParam(':user_id', $this->user_id);
+    $stmt->bindParam(':id', $this->id);
     
     // execute the query
     if($stmt->execute()){
@@ -132,22 +156,20 @@ function update($match_id_to_change,$team_id_to_change){
     return false;
 }
 
-// delete the matches_teames
+// delete the rating
 function delete(){
  
     // delete query
-    $query = "DELETE FROM " . $this->table_name . " WHERE match_id = ? AND team_id = ? ";
+    $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
  
     // prepare query
     $stmt = $this->conn->prepare($query);
  
     // sanitize
-    $this->match_id=htmlspecialchars(strip_tags($this->match_id));
-    $this->team_id=htmlspecialchars(strip_tags($this->team_id));
+    $this->id=htmlspecialchars(strip_tags($this->id));
  
     // bind id of record to delete
-    $stmt->bindParam(1, $this->match_id);
-    $stmt->bindParam(2, $this->team_id);
+    $stmt->bindParam(1, $this->id);
  
     // execute query
     if($stmt->execute()){
@@ -158,7 +180,7 @@ function delete(){
      
 }
 
-// search matches_teams
+// search ratings
 function search(){
  
     // select all query
@@ -168,24 +190,31 @@ function search(){
                 " . $this->table_name . " 
             WHERE
                 match_id = ?
+                AND
+                player_id = ?
             ORDER BY
-                team_id DESC";
+                match_id DESC";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);
  
-
+     // sanitize
+    $this->match_id=htmlspecialchars(strip_tags($this->match_id));
+    $this->player_id=htmlspecialchars(strip_tags($this->player_id));
     // bind
     $stmt->bindParam(1, $this->match_id);
+    $stmt->bindParam(2, $this->player_id);
 
  
     // execute query
     $stmt->execute();
  
     return $stmt;
+    
+
 }
 
-// read matches_teams with pagination
+// read ratings with pagination
 public function readPaging($from_record_num, $records_per_page){
  
     // select query
@@ -210,7 +239,7 @@ public function readPaging($from_record_num, $records_per_page){
     return $stmt;
 }
 
-// used for paging matches_teams
+// used for paging ratings
 public function count(){
     $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name . "";
  

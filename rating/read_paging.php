@@ -41,7 +41,6 @@ if($num>0){
         extract($row);
  
         $rating_item=array(
-            "id" => $id,
             "match_id" => $match_id,
             "player_id" => $player_id,
             "rating" => $rating,

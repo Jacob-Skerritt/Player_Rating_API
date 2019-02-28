@@ -8,26 +8,25 @@ header('Content-Type: application/json');
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/rating.php';
+include_once '../objects/rating_history.php';
  
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
 // prepare player object
-$rating = new Rating($db);
+$rating = new Rating_History($db);
  
 // set ID property of record to read
 $data = json_decode(file_get_contents("php://input"));
-$rating->match_id = $data->match_id; 
-$rating->player_id = $data->player_id;
-$rating->user_id = $data->user_id;
+$rating->id = $data->id; 
 // read the details of player to be edited
 $rating->readOne();
  
-if($rating->match_id!=null && $rating->user_id!=null && $rating->player_id!=null){
+if($rating->id!=null){
     // create array
     $rating_arr = array(
+        "id" =>  $rating->id,
         "match_id" => $rating->match_id,
         "player_id" => $rating->player_id,
         "rating" => $rating->rating,

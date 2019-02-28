@@ -179,7 +179,7 @@ function search(){
                     teams t
                         ON p.team_id = t.id
             WHERE
-                p.player_name LIKE ? OR team_name LIKE ? OR player_no = ?
+               p.team_id = ? 
             ORDER BY
                 team_name DESC";
  
@@ -189,9 +189,7 @@ function search(){
     // sanitize
  
     // bind
-    $stmt->bindParam(1, $this->player_name);
-    $stmt->bindParam(2, $this->team_name);
-    $stmt->bindParam(3, $this->player_no);
+    $stmt->bindParam(1, $this->team_name);
 
  
     // execute query

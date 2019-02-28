@@ -30,7 +30,7 @@ if($match->match_date_time!=null){
         "match_date_time" => $match->match_date_time,
         "match_location" => $match->match_location,
         "match_elapsed_time" => $match->match_elapsed_time,
-        "match_location" => $match->match_location
+        "match_competition" => $match->match_competition
  
     );
  
