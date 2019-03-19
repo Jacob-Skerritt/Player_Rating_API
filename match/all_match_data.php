@@ -13,6 +13,7 @@ include_once '../objects/match.php';
 include_once '../objects/match_team.php';
 include_once '../objects/player.php';
 include_once '../objects/team.php';
+include_once '../objects/rating.php';
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
@@ -22,6 +23,7 @@ $match = new Match($db);
 $match_team = new Match_Team($db);
 $team = new Team($db);
 $player = new Player($db);
+$ratings = new Rating($db);
 
 // set ID property of record to read
 $data = json_decode(file_get_contents("php://input"));
@@ -44,7 +46,7 @@ if ($match->id != null) {
     $stmt = $match_team->search();
     $num = $stmt->rowCount();
 
-
+if($num >0){
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         // extract row
         // this will make $row['name'] to
@@ -53,8 +55,52 @@ if ($match->id != null) {
 
         $match_teams[] = $team_id;
     }
-    echo json_encode($match_teams);
+    
+    $ratings->match_id = $match->id;
+    $stmt2 = $ratings->get_average_ratings();
+    $num2 = $stmt2->rowCount();
+    
+    if ($num2 > 0) {
 
+        // ratings array
+        $ratings_arr = array();
+
+        // retrieve our table contents
+        // fetch() is faster than fetchAll()
+        // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+
+
+
+        while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+            // extract row
+            // this will make $row['name'] to
+            // just $name only
+            extract($row);
+            $array[$player_id][] = $rating;
+        }
+
+            $count = 0;
+        foreach ($array as $players => $player_ratings) {
+
+            foreach ($player_ratings as $each_rating) {
+                $count += $each_rating;
+            }
+
+
+
+                $rating_item = array(
+                "player_id" => $players,
+                "average_rating" => $count/sizeOf($array[$players])
+            );
+                
+               
+
+            array_push($ratings_arr, $rating_item);
+             $count = 0;
+            }
+    }    
+    
+      $keys = array_keys($ratings_arr);
     foreach ($match_teams as $teams) {
         $team->id = $teams;
         $team->readOne();
@@ -66,26 +112,35 @@ if ($match->id != null) {
 
             // players array
             $players_arr = array();
-            $players_arr["records"] = array();
 
             // retrieve our table contents
             // fetch() is faster than fetchAll()
             // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+          
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 // extract row
                 // this will make $row['name'] to
                 // just $name only
                 extract($row);
-
+                $player_rating =0;
+                
+                for($i = 0; $i < sizeOf($ratings_arr); $i++){
+                   
+                    if($ratings_arr[$keys[$i]]["player_id"] == $id){
+                        $player_rating = $ratings_arr[$keys[$i]]["average_rating"];
+                    }
+                }
+                
                 $player_item = array(
                     "id" => $id,
                     "player_name" => $player_name,
                     "player_no" => $player_no,
                     "player_image" => $player_image,
-                    "team_name" => $team_name
+                    "team_name" => $team_name,
+                    "average_rating" => $player_rating
                 );
 
-                array_push($players_arr["records"], $player_item);
+                array_push($players_arr, $player_item);
             }
         }
 
@@ -105,7 +160,7 @@ if ($match->id != null) {
     // make it json format
 
     echo json_encode($match_arr);
-} else {
+}}else {
     // set response code - 404 Not found
     http_response_code(404);
 

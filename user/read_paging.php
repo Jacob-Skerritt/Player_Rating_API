@@ -42,7 +42,7 @@ if($num>0){
  
         $user_item=array(
             "id" => $id,
-            "user_uuid" => $user_uuid,
+            "username" => $username,
             "uuid_timestamp" => $uuid_timestamp
         );
  

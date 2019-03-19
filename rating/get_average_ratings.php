@@ -12,11 +12,12 @@ include_once '../objects/rating.php';
 $database = new Database();
 $db = $database->getConnection();
 
+$data =  json_decode(file_get_contents("php://input"));
 // initialize object
 $ratings = new Rating($db);
-
+$ratings->match_id = $data->id;
 // query ratings
-$stmt = $ratings->read();
+$stmt = $ratings->get_average_ratings();
 $num = $stmt->rowCount();
 
 // check if more than 0 record found
@@ -24,7 +25,6 @@ if ($num > 0) {
 
     // ratings array
     $ratings_arr = array();
-    $ratings_arr["records"] = array();
 
     // retrieve our table contents
     // fetch() is faster than fetchAll()
@@ -56,7 +56,7 @@ if ($num > 0) {
             "average_rating" => $count/sizeOf($array[$players])
         );
 
-        array_push($ratings_arr["records"], $rating_item);
+        array_push($ratings_arr, $rating_item);
          $count = 0;
     }
 

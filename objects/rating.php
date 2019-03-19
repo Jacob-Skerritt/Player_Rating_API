@@ -24,9 +24,10 @@ class Rating {
                         match_id = ?
                     ORDER BY 
                         player_id";
-
+        
+        
         $stmt = $this->conn->prepare($query);
-
+                $stmt->bindParam(1, $this->match_id);
         $stmt->execute();
 
         return $stmt;
@@ -44,6 +45,7 @@ class Rating {
                 match_id DESC";
         // prepare query statement
         $stmt = $this->conn->prepare($query);
+        
 
         // execute query
         $stmt->execute();

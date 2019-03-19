@@ -26,19 +26,19 @@ else{
     $user->id = 0;
 }
 
-if($data->user_uuid != null){
-$user->user_uuid = $data->user_uuid;}
+if($data->username != null){
+$user->username = $data->username;}
 else{
-    $user_uuid = "N/A";
+    $username = "N/A";
 }
 // read the details of player to be edited
 $user->readOne();
  
-if($user->user_uuid!=null){
+if($user->username!=null){
     // create array
     $user_arr = array(
         "id" =>  $user->id,
-        "user_uuid" => $user->user_uuid,
+        "username" => $user->username,
         "uuid_timestamp" => $user->uuid_timestamp
  
     );

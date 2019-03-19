@@ -25,11 +25,11 @@ else
     $user=-1;
 }
 
-if($data->user_uuid != null){
-    $user->user_uuid = $data->user_uuid;
+if($data->username != null){
+    $user->username = $data->username;
 }
 else{
-    $user->user_uuid = "N/A";
+    $user->username = "N/A";
 }
 
 if($data->uuid_timestamp !=null){
@@ -61,7 +61,7 @@ if($num>0){
  
         $user_item=array(
             "id" => $id,
-            "user_uuid" => $user_uuid,
+            "username" => $username,
             "uuid_timestmap" => $uuid_timestamp
         );
  

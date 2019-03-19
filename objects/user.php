@@ -7,7 +7,7 @@ class User {
     private $table_name = "users";
     // object properties
     public $id;
-    public $user_uuid;
+    public $username;
     public $uuid_timestamp;
 
     // constructor with $db as database connection
@@ -41,16 +41,16 @@ class User {
         $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-                user_uuid=:user_uuid";
+                username=:username";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->user_uuid = htmlspecialchars(strip_tags($this->user_uuid));
+        $this->username = htmlspecialchars(strip_tags($this->username));
 
         // bind values
-        $stmt->bindParam(":user_uuid", $this->user_uuid);
+        $stmt->bindParam(":username", $this->username);
 
         // execute query
         if ($stmt->execute()) {
@@ -68,7 +68,7 @@ class User {
             FROM
                 " . $this->table_name . " 
             WHERE
-                user_uuid = ? OR id = ?
+                username = ? OR id = ?
             LIMIT
                 0,1";
 
@@ -76,7 +76,7 @@ class User {
         $stmt = $this->conn->prepare($query);
 
         // bind id of players to be updated
-        $stmt->bindParam(1, $this->user_uuid);
+        $stmt->bindParam(1, $this->username);
         $stmt->bindParam(2, $this->id);
 
         // execute query
@@ -87,7 +87,7 @@ class User {
 
         // set values to object properties
         $this->id = $row['id'];
-        $this->user_uuid = $row['user_uuid'];
+        $this->username = $row['username'];
         $this->uuid_timestamp = $row['uuid_timestamp'];
     }
 
@@ -97,7 +97,7 @@ class User {
         $query = "UPDATE
             " . $this->table_name . "
             SET
-            user_uuid = :user_uuid
+            username = :username
             WHERE
             id = :id";
 
@@ -105,10 +105,10 @@ class User {
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->user_uuid = htmlspecialchars(strip_tags($this->user_uuid));
+        $this->username = htmlspecialchars(strip_tags($this->username));
         $this->id = htmlspecialchars(strip_tags($this->id));
         // bind new values
-        $stmt->bindParam(':user_uuid', $this->user_uuid);
+        $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':id', $this->id);
 
         // execute the query
@@ -122,7 +122,7 @@ class User {
     function delete() {
 
         // delete query
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = ? OR user_uuid = ?";
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ? OR username = ?";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -132,7 +132,7 @@ class User {
 
         // bind id of record to delete
         $stmt->bindParam(1, $this->id);
-        $stmt->bindParam(2, $this->user_uuid);
+        $stmt->bindParam(2, $this->username);
 
         // execute query
         if ($stmt->execute()) {
@@ -151,19 +151,19 @@ class User {
             FROM
                 " . $this->table_name . " 
             WHERE
-                uuid_timestamp >= ? OR id = ? OR user_uuid = ?
+                uuid_timestamp >= ? OR id = ? OR username = ?
             ORDER BY
-                user_uuid DESC";
+                username DESC";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->user_uuid = htmlspecialchars(strip_tags($this->user_uuid));
+        $this->username = htmlspecialchars(strip_tags($this->username));
         // bind
         $stmt->bindParam(1, $this->uuid_timestamp);
         $stmt->bindParam(2, $this->id);
-        $stmt->bindParam(3, $this->user_uuid);
+        $stmt->bindParam(3, $this->username);
 
 
         // execute query

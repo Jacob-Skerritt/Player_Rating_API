@@ -22,11 +22,11 @@ $data = json_decode(file_get_contents("php://input"));
  
 // make sure data is not empty
 if(
-    !empty($data->user_uuid) 
+    !empty($data->username) 
 ){
  
     // set user  property values
-    $user->user_uuid = $data->user_uuid;
+    $user->username = $data->username;
 
  
     // create the user

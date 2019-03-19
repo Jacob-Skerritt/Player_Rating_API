@@ -27,13 +27,13 @@ else{
     $user->id = 0;
 }
 
-if($data->user_uuid != null){
-    $user->user_uuid = $data->user_uuid;
+if($data->username != null){
+    $user->username = $data->username;
 }else{
-    $user->user_uuid = "N/A";
+    $user->username = "N/A";
 }
 echo $user->id ;
-echo $user->user_uuid;
+echo $user->username;
  
 // delete the user
 if($user->delete()){

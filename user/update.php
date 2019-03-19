@@ -25,7 +25,7 @@ $user->id = $data->id;
  
 
 // set user property values
-$user->user_uuid = $data->user_uuid;
+$user->username = $data->username;
 
  
 // update the user
