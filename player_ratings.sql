@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2019 at 10:23 PM
+-- Generation Time: Mar 20, 2019 at 11:11 AM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -60,8 +60,7 @@ CREATE TABLE `matches` (
 --
 
 INSERT INTO `matches` (`id`, `match_date_time`, `match_location`, `match_elapsed_time`, `competition`) VALUES
-(1, '2019-03-13 20:00:00', 'Allianz Arena', 0, 'Champions League'),
-(2, '2019-02-15 00:00:00', 'jhjh', 94, 'ldflkgjdf;lkgj');
+(1, '2019-03-13 20:00:00', 'Allianz Arena', 0, 'Champions League');
 
 -- --------------------------------------------------------
 
@@ -83,8 +82,7 @@ CREATE TABLE `matches_events` (
 --
 
 INSERT INTO `matches_events` (`id`, `match_id`, `event_id`, `player_id`, `team_id`, `date_time`) VALUES
-(1, 1, 4, 25, 4, '2019-02-26 19:16:55'),
-(2, 1, 3, 7, 3, '2019-02-26 18:04:51');
+(1, 1, 3, 51, 3, '2019-03-20 09:20:53');
 
 -- --------------------------------------------------------
 
@@ -104,8 +102,50 @@ CREATE TABLE `matches_players` (
 --
 
 INSERT INTO `matches_players` (`match_id`, `player_id`, `team_id`, `position`) VALUES
-(1, 25, 4, -1),
-(1, 26, 4, 23);
+(1, 47, 3, 0),
+(1, 48, 3, 0),
+(1, 49, 3, 0),
+(1, 50, 3, 0),
+(1, 51, 3, 0),
+(1, 52, 3, 0),
+(1, 53, 3, 0),
+(1, 54, 3, 0),
+(1, 55, 3, 0),
+(1, 56, 3, 0),
+(1, 57, 3, 0),
+(1, 58, 3, 0),
+(1, 59, 3, 0),
+(1, 60, 3, 0),
+(1, 61, 3, 0),
+(1, 62, 3, 0),
+(1, 63, 3, 0),
+(1, 64, 3, 0),
+(1, 65, 3, 0),
+(1, 66, 3, 0),
+(1, 67, 3, 0),
+(1, 68, 3, 0),
+(1, 69, 4, 0),
+(1, 70, 4, 0),
+(1, 71, 4, 0),
+(1, 72, 4, 0),
+(1, 73, 4, 0),
+(1, 74, 4, 0),
+(1, 75, 4, 0),
+(1, 76, 4, 0),
+(1, 77, 4, 0),
+(1, 78, 4, 0),
+(1, 79, 4, 0),
+(1, 80, 4, 0),
+(1, 81, 4, 0),
+(1, 82, 4, 0),
+(1, 83, 4, 0),
+(1, 84, 4, 0),
+(1, 85, 4, 0),
+(1, 86, 4, 0),
+(1, 87, 4, 0),
+(1, 88, 4, 0),
+(1, 89, 4, 0),
+(1, 90, 4, 0);
 
 -- --------------------------------------------------------
 
@@ -124,8 +164,8 @@ CREATE TABLE `matches_teams` (
 --
 
 INSERT INTO `matches_teams` (`match_id`, `team_id`, `formation`) VALUES
-(1, 3, '4-3-3'),
-(1, 4, '4-4-2');
+(1, 3, NULL),
+(1, 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -146,50 +186,50 @@ CREATE TABLE `players` (
 --
 
 INSERT INTO `players` (`id`, `player_name`, `player_no`, `player_image`, `team_id`) VALUES
-(3, 'Neuer', 1, 'N/A', 3),
-(4, 'Rafinha', 13, 'N/A', 3),
-(5, 'Sule', 4, 'N/A', 3),
-(6, 'Hummels', 5, 'N/A', 3),
-(7, 'Alaba', 27, 'N/A', 3),
-(8, 'Thiago', 6, 'N/A', 3),
-(9, 'Rodriguez', 11, 'N/A', 3),
-(10, 'Martinez', 8, 'N/A', 3),
-(11, 'Gnabry', 22, 'N/A', 3),
-(12, 'Lewandowski', 9, 'N/A', 3),
-(13, 'Coman', 29, 'N/A', 3),
-(14, 'Ulreich', 26, 'N/A', 3),
-(15, 'Mai', 33, 'N/A', 3),
-(16, 'Boateng', 17, 'N/A', 3),
-(17, 'Shabani', 37, 'N/A', 3),
-(18, 'Sanches', 35, 'N/A', 3),
-(19, 'Tolisso', 24, 'N/A', 3),
-(20, 'Goretzka', 18, 'N/A', 3),
-(21, 'Muller', 25, 'N/A', 3),
-(22, 'Davies', 19, 'N/A', 3),
-(23, 'Robben', 10, 'N/A', 3),
-(24, 'Ribery', 7, 'N/A', 3),
-(25, 'Alisson', 13, 'N/A', 4),
-(26, 'Alexander-Arnold', 66, 'N/A', 4),
-(27, 'Matip', 32, 'N/A', 4),
-(28, 'Van Dikj', 5, 'N/A', 4),
-(29, 'Robertson', 26, 'N/A', 4),
-(30, 'Wijnaldum', 5, 'N/A', 4),
-(31, 'Henderson', 14, 'N/A', 4),
-(32, 'Keita', 8, 'N/A', 4),
-(33, 'Salah', 11, 'N/A', 4),
-(34, 'Firmino', 9, 'N/A', 4),
-(35, 'Mane', 10, 'N/A', 4),
-(36, 'Mignolet', 22, 'N/A', 4),
-(37, 'Lovren', 6, 'N/A', 4),
-(38, 'Gomez', 12, 'N/A', 4),
-(39, 'Moreno', 18, 'N/A', 4),
-(40, 'Milner', 7, 'N/A', 4),
-(41, 'Lallana', 20, 'N/A', 4),
-(42, 'Fabinho', 3, 'N/A', 4),
-(43, 'Oxlade-Chamberlain', 21, 'N/A', 4),
-(44, 'Shaqiri', 23, 'N/A', 4),
-(45, 'Sturridge', 15, 'N/A', 4),
-(46, 'Origi', 27, 'N/A', 4);
+(47, 'Neuer', 1, 'Neuer.jpg', 3),
+(48, 'Rafinha', 13, 'Rafinha.jpg', 3),
+(49, 'Sule', 4, 'Sule.jpg', 3),
+(50, 'Hummels', 5, 'Hummels.jpg', 3),
+(51, 'Alaba', 27, 'Alaba.jpg', 3),
+(52, 'Thiago', 6, 'Thiago.jpg', 3),
+(53, 'Rodriguez', 11, 'Rodriguez.jpg', 3),
+(54, 'Martinez', 8, 'Martinez.jpg', 3),
+(55, 'Gnabry', 22, 'Gnabry.jpg', 3),
+(56, 'Lewandowski', 9, 'Lewandowski.jpg', 3),
+(57, 'Coman', 29, 'Coman.jpg', 3),
+(58, 'Ulreich', 26, 'Ulreich.jpg', 3),
+(59, 'Mai', 33, 'Mai.jpg', 3),
+(60, 'Boateng', 17, 'Boateng.jpg', 3),
+(61, 'Shabani', 37, 'Shabani.jpg', 3),
+(62, 'Sanches', 35, 'Sanches.jpg', 3),
+(63, 'Tolisso', 24, 'Tolisso.jpg', 3),
+(64, 'Goretzka', 18, 'Goretzka.jpg', 3),
+(65, 'Muller', 25, 'Muller.jpg', 3),
+(66, 'Davies', 19, 'Davies.jpg', 3),
+(67, 'Robben', 10, 'Robben.jpg', 3),
+(68, 'Ribery', 7, 'Ribery.jpg', 3),
+(69, 'Alisson', 13, 'Alisson.jpg', 4),
+(70, 'Alexander-Arnold', 66, 'Alexander-Arnold.jpg', 4),
+(71, 'Matip', 32, 'Matip.jpg', 4),
+(72, 'Van Dikj', 5, 'Van Dikj.jpg', 4),
+(73, 'Robertson is gay', 26, 'Robertson.jpg', 4),
+(74, 'Wijnaldum', 5, 'Wijnaldum.jpg', 4),
+(75, 'Henderson', 14, 'Henderson.jpg', 4),
+(76, 'Keita', 8, 'Keita.jpg', 4),
+(77, 'Salah', 11, 'Salah.jpg', 4),
+(78, 'Firmino', 9, 'Firmino.jpg', 4),
+(79, 'Mane', 10, 'Mane.jpg', 4),
+(80, 'Mignolet', 22, 'Mignolet.jpg', 4),
+(81, 'Lovren', 6, 'Lovren.jpg', 4),
+(82, 'Gomez', 12, 'Gomez.jpg', 4),
+(83, 'Moreno', 18, 'Moreno.jpg', 4),
+(84, 'Milner', 7, 'Milner.jpg', 4),
+(85, 'Lallana', 20, 'Lallana.jpg', 4),
+(86, 'Fabinho', 3, 'Fabinho.jpg', 4),
+(87, 'Oxlade-Chamberlain', 21, 'Oxlade-Chamberlain.jpg', 4),
+(88, 'Shaqiri', 23, 'Shaqiri.jpg', 4),
+(89, 'Sturridge', 15, 'Sturridge.jpg', 4),
+(90, 'Origi', 27, 'Origi.jpg', 4);
 
 -- --------------------------------------------------------
 
@@ -210,7 +250,19 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`match_id`, `player_id`, `user_id`, `rating`, `date_time`) VALUES
-(1, 7, 2, 10, '2019-02-28 21:19:26');
+(1, 51, 2, 8, '2019-03-17 18:19:39'),
+(1, 51, 3, 3, '2019-03-17 18:20:08'),
+(1, 51, 4, 2, '2019-03-17 18:19:39'),
+(1, 51, 5, 6, '2019-03-17 18:20:08'),
+(1, 55, 3, 3, '2019-03-17 19:05:37'),
+(1, 66, 6, 6, '2019-03-17 19:05:37'),
+(1, 69, 2, 34, '2019-03-19 18:34:43'),
+(1, 69, 5, 8, '2019-03-18 15:18:01'),
+(1, 70, 2, 2, '2019-03-17 19:05:03'),
+(1, 70, 5, 4, '2019-03-17 19:05:03'),
+(1, 70, 6, 8, '2019-03-17 19:05:21'),
+(1, 76, 2, 9, '2019-03-19 18:07:46'),
+(1, 87, 2, 6, '2019-03-19 19:31:24');
 
 --
 -- Triggers `ratings`
@@ -242,12 +294,12 @@ CREATE TABLE `ratings_history` (
 --
 
 INSERT INTO `ratings_history` (`id`, `match_id`, `player_id`, `rating`, `user_id`, `date_time`) VALUES
-(34, 1, 7, 1, 6, '2019-02-28 13:09:47'),
-(35, 1, 7, 2, 2, '2019-02-28 21:14:41'),
-(36, 1, 16, 2, 6, '2019-02-28 21:15:12'),
-(37, 1, 25, 4, 5, '2019-02-28 21:14:41'),
-(38, 1, 42, 6, 6, '2019-02-28 21:15:12'),
-(39, 1, 7, 2, 2, '2019-02-28 21:18:15');
+(1, 1, 69, 3, 5, '2019-03-17 19:05:21'),
+(2, 1, 76, 3, 2, '2019-03-19 17:59:21'),
+(3, 1, 76, 3, 2, '2019-03-19 17:59:24'),
+(4, 1, 76, 3, 2, '2019-03-19 17:59:26'),
+(5, 1, 76, 3, 2, '2019-03-19 18:07:19'),
+(6, 1, 87, 6, 2, '2019-03-19 19:30:09');
 
 -- --------------------------------------------------------
 
@@ -263,17 +315,6 @@ CREATE TABLE `substitutions` (
   `team_id` int(11) NOT NULL,
   `date_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `substitutions`
---
-
-INSERT INTO `substitutions` (`id`, `match_id`, `sub_player_id`, `starting_player_id`, `team_id`, `date_time`) VALUES
-(1, 1, 7, 26, 4, '2019-02-14 00:00:00'),
-(2, 1, 25, 25, 4, '2019-02-28 00:00:00'),
-(3, 2, 7, 25, 4, '2019-02-25 11:44:36'),
-(5, 2, 25, 25, 4, '2019-02-25 11:14:28'),
-(6, 1, 7, 26, 4, '2019-02-25 11:18:25');
 
 -- --------------------------------------------------------
 
@@ -304,7 +345,7 @@ INSERT INTO `teams` (`id`, `team_name`, `crest`, `manager`) VALUES
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `user_uuid` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
   `uuid_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -312,7 +353,7 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `user_uuid`, `uuid_timestamp`) VALUES
+INSERT INTO `users` (`id`, `username`, `uuid_timestamp`) VALUES
 (2, 'bob', '2019-02-24 12:16:46'),
 (3, 'tim', '2019-02-26 22:47:19'),
 (4, 'jim', '2019-02-26 22:47:19'),
@@ -420,31 +461,31 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `matches`
 --
 ALTER TABLE `matches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `matches_events`
 --
 ALTER TABLE `matches_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `players`
 --
 ALTER TABLE `players`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `ratings_history`
 --
 ALTER TABLE `ratings_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `substitutions`
 --
 ALTER TABLE `substitutions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `teams`

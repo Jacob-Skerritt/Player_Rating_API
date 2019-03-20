@@ -25,12 +25,6 @@ if($data->match_id !=null){
     $match_event->match_id = -1;
 }
 
-if($data->player_id !=null){
-    $match_event->player_id = $data->player_id;
-}else
-{
-    $match_event->player_id = -1;
-}
 
 if($data->event_id !=null){
     $match_event->event_id = $data->event_id;
@@ -62,8 +56,8 @@ if($num>0){
             "id" => $id,
             "match_id" => $match_id,
             "player_id" => $player_name,
-            "event_id" => $event,
-            "team_id" => $team_name,
+            "event_id" => $event_id,
+            "team_id" => $team_id,
             "date_time" =>$date_time
         );
  

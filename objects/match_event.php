@@ -188,20 +188,14 @@ function search(){
  
     // select all query
         $query = "SELECT
-               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.date_time
+               me.id, me.match_id, p.player_name, me.event_id, me.team_id, me.date_time
             FROM
                 " . $this->table_name . " me
                 LEFT JOIN
-                    teams t
-                        ON me.team_id = t.id
-                LEFT JOIN
                     players p
                         ON me.player_id = p.id
-                LEFT JOIN
-                    events e
-                        ON me.event_id = e.id
             WHERE
-                me.match_id = ? OR me.player_id = ? OR me.event_id = ?
+                me.match_id = ? AND me.event_id = ?
             ORDER BY
                 match_id DESC";
  
@@ -212,8 +206,7 @@ function search(){
  
     // bind
     $stmt->bindParam(1, $this->match_id);
-    $stmt->bindParam(2, $this->player_id);
-    $stmt->bindParam(3,$this->event_id);
+    $stmt->bindParam(2,$this->event_id);
 
  
     // execute query
