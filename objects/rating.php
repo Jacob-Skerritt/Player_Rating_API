@@ -239,6 +239,36 @@ class Rating {
 
         return $stmt;
     }
+    
+        function searchUser() {
+
+        // select all query
+        $query = "SELECT
+               *
+            FROM
+                " . $this->table_name . " 
+            WHERE
+                user_id = ? AND match_id = ?
+            ORDER BY
+                player_id ASC";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+        $this->match_id = htmlspecialchars(strip_tags($this->match_id));
+        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+        // bind
+        $stmt->bindParam(1, $this->user_id);
+        $stmt->bindParam(2, $this->match_id);
+
+
+
+        // execute query
+        $stmt->execute();
+
+        return $stmt;
+    }
 
 // read ratings with pagination
     public function readPaging($from_record_num, $records_per_page) {
