@@ -93,7 +93,7 @@ if ($match->id != null) {
             // just $name only
             extract($rowMatchEvent);
             if ($team_id == $match_teams[0]) {
-                $$team1_score++;
+                $team1_score++;
             }
 
             if ($team_id == $match_teams[1]) {
