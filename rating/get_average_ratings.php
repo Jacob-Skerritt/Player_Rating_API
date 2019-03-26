@@ -46,9 +46,6 @@ if ($num > 0) {
         foreach ($player_ratings as $each_rating) {
             $count += $each_rating;
         }
-        
-        
-        
 
 
        
@@ -56,7 +53,7 @@ if ($num > 0) {
             
             $rating_item = array(
             "player_id" => $players,
-            "average_rating" => $count
+            "average_rating" => $count/sizeOf($array[$players])
         );
 
         array_push($ratings_arr, $rating_item);
