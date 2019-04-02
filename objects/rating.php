@@ -52,6 +52,26 @@ class Rating {
 
         return $stmt;
     }
+    
+        function ratingsCount() {
+
+        // select all query
+        $query = "SELECT
+                user_id, COUNT(*) as count
+            FROM
+                " . $this->table_name . " 
+            GROUP BY
+                user_id ASC";
+        
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+        
+
+        // execute query
+        $stmt->execute();
+
+        return $stmt;
+    }
 
 // create rating
     function create() {
