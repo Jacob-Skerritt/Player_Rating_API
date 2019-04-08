@@ -205,7 +205,7 @@ function search(){
             WHERE
                 match_id  = ?
                             ORDER BY
-                match_id DESC";
+                s.date_time DESC";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);

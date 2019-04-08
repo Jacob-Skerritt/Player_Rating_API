@@ -18,24 +18,7 @@ $player = new Player($db);
 // get keywords
 $data = json_decode(file_get_contents("php://input"));
 
-if($data->player_name !=null){
-    $player->player_name = $data->player_name;
-}else {
-$player->player_name = "N/A";}
-
-if($data->player_no != null){
-    $player->player_no = $data->player_no;
-}else
-{
-    $player->player_no = -1;
-}
-
-if($data->team_name !=null)
-{
-    $player->team_name = $data->team_name;
-}else{
-    $player->team_name = "N/A";
-}
+$player->team_name= $data->team_id;
 
 
  
@@ -63,6 +46,7 @@ if($num>0){
             "id" => $id,
             "player_name" => $player_name,
             "player_no" => $player_no,
+            "player_role" =>$player_role,
             "player_image" => $player_image,
             "team_name" => $team_name
         );

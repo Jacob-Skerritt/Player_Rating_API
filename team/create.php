@@ -24,13 +24,20 @@ $data = json_decode(file_get_contents("php://input"));
 if(
     !empty($data->team_name) &&
     !empty($data->crest) &&
-    !empty($data->manager)
+    !empty($data->manager) &&
+    !empty($data->home_colours) &&
+    !empty($data->away_colours) &&
+    !empty($data->alt_colours)
 ){
  
+    
     // set team  property values
     $team->team_name = $data->team_name;
     $team->crest = $data->crest;
     $team->manager = $data->manager;
+    $team->home_colours = $data->home_colours;
+    $team->away_colours =$data->away_colours;
+    $team->alt_colours =$data->alt_colours;
 
  
     // create the team

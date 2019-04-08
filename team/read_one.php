@@ -29,7 +29,10 @@ if($team->team_name!=null){
         "id" =>  $team->id,
         "team_name" => $team->team_name,
         "crest" => $team->crest,
-        "manager" => $team->manager
+        "manager" => $team->manager,
+        "home_colours" => $team->home_colours,
+        "away_colours" =>$team->away_colours,
+        "alt_colours"=>$team->alt_colours
  
     );
  

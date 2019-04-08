@@ -18,7 +18,8 @@ include_once '../objects/user.php';
 include_once '../objects/match_player.php';
 include_once '../objects/match_event.php';
 include_once '../objects/rating.php';
-
+include_once '../objects/event.php';
+include_once '../objects/substitution.php';
 
 // get database connection
 $database = new Database();
@@ -33,6 +34,8 @@ $ratings = new Rating($db);
 $users = new User($db);
 $match_player = new Match_Player($db);
 $match_event = new Match_Event($db);
+$event = new Event($db);
+$substitution = new Substitution($db);
 
 
 // set ID property of record to read
@@ -57,6 +60,7 @@ if ($match->id != null) {
         "teams" => array(),
         "users" => array(),
         "user_ratings" => array(),
+        "events" => array()
     );
 
 
@@ -80,31 +84,78 @@ if ($match->id != null) {
 
 
         $match_event->match_id = $data->id;
-        $match_event->event_id = 3;
+
         $stmtMatchEvent = $match_event->search();
 
 
         // match_events array
 
-
+        
         while ($rowMatchEvent = $stmtMatchEvent->fetch(PDO::FETCH_ASSOC)) {
             // extract row
             // this will make $row['name'] to
             // just $name only
             extract($rowMatchEvent);
-            if ($team_id == $match_teams[0]) {
+            
+            if($event_id ==3){
+                if ($team_id == $match_teams[0]) {
                 $team1_score++;
-            }
+                }
 
-            if ($team_id == $match_teams[1]) {
+                if ($team_id == $match_teams[1]) {
+                    $team2_score++;
+                }
+            }else if($event_id == 6){
+                if ($team_id == $match_teams[0]) {
                 $team2_score++;
+                }
+
+                if ($team_id == $match_teams[1]) {
+                    $team1_score++;
+                }
             }
+            
+            $match_event_item=array(
+            "id" => $id,
+            "match_id" => $match_id,
+            "player_id" => $player_id,
+            "event_id" => $event_id,
+            "event" =>$event,
+            "team_id" => $team_id,
+            "date_time" =>$date_time
+        );
+            
+            array_push($match_arr["events"], $match_event_item);
+            
         }
 
         $match_arr["team1_score"] = $team1_score;
         $match_arr["team2_score"] = $team2_score;
+        
+        
+        $substitution->match_id = $match->id;
+        $stmtSubstitution = $substitution->search();
+        
+            while ($row = $stmtSubstitution->fetch(PDO::FETCH_ASSOC)){
+        // extract row
+        // this will make $row['name'] to
+        // just $name only
+        extract($row);
+ 
+        $substitution_item=array(
+            "id" => $id,
+            "match_id" => $match_id,
+            "sub_player" => $sub_player,
+            "starting_player" => $starting_player,
+            "team_name" => $team_name,
+            "date_time" =>$date_time
+        );
+ 
+        array_push($match_arr["events"], $substitution_item);
+    }
+        
         $stmtUser = $users->read();
-        $users_arr = array();
+
 
 // check if more than 0 record found
         // users array
@@ -168,9 +219,11 @@ if ($match->id != null) {
                 array_push($ratings_arr, $rating_item);
                 $count = 0;
             }
+            $keys = array_keys($ratings_arr);
+            
         }
+        
 
-        $keys = array_keys($ratings_arr);
 
         $ratings->match_id = $data->id;
         $ratings->user_id = $data->user_id;
@@ -181,7 +234,6 @@ if ($match->id != null) {
         if ($numSearchUser > 0) {
 
             // ratings array
-
             // retrieve our table contents
             // fetch() is faster than fetchAll()
             // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
@@ -204,107 +256,111 @@ if ($match->id != null) {
         }
 
 
-            $match_player->match_id = $data->id;
+        $match_player->match_id = $data->id;
 
-            $stmt = $match_player->search();
+        $stmt = $match_player->search();
+        $num = $stmt->rowCount();
+
+
+        // match_players array
+        $match_players_arr = array();
+
+        // retrieve our table contents
+        // fetch() is faster than fetchAll()
+        // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            // extract row
+            // this will make $row['name'] to
+            // just $name only
+            extract($row);
+
+            $match_player_item = array(
+                "player_name" => $player_name,
+                "position" => $position
+            );
+
+
+            array_push($match_players_arr, $match_player_item);
+        }
+        $keys2 = array_keys($match_players_arr);
+
+        foreach ($match_teams as $teams) {
+            $team->id = $teams;
+            $team->readOne();
+            $player->team_name = $teams;
+            $stmt = $player->search();
             $num = $stmt->rowCount();
+            if ($num > 0) {
+
+                // players array
+                $players_arr = array();
+
+                // retrieve our table contents
+                // fetch() is faster than fetchAll()
+                // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    // extract row
+                    // this will make $row['name'] to
+                    // just $name only
+                    extract($row);
+                    $player_rating = 0;
+                    $position = -1;
 
 
-            // match_players array
-            $match_players_arr = array();
-
-            // retrieve our table contents
-            // fetch() is faster than fetchAll()
-            // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                // extract row
-                // this will make $row['name'] to
-                // just $name only
-                extract($row);
-
-                $match_player_item = array(
-                    "player_name" => $player_name,
-                    "position" => $position
-                );
-
-
-                array_push($match_players_arr, $match_player_item);
-            }
-            $keys2 = array_keys($match_players_arr);
-
-            foreach ($match_teams as $teams) {
-                $team->id = $teams;
-                $team->readOne();
-                $player->team_name = $teams;
-                $stmt = $player->search();
-                $num = $stmt->rowCount();
-                if ($num > 0) {
-
-                    // players array
-                    $players_arr = array();
-
-                    // retrieve our table contents
-                    // fetch() is faster than fetchAll()
-                    // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
-
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        // extract row
-                        // this will make $row['name'] to
-                        // just $name only
-                        extract($row);
-                        $player_rating = 0;
-                        $position = -1;
-
+                    if (!empty($ratings_arr)) {
                         for ($i = 0; $i < sizeOf($ratings_arr); $i++) {
 
                             if ($ratings_arr[$keys[$i]]["player_id"] == $id) {
                                 $player_rating = $ratings_arr[$keys[$i]]["average_rating"];
                             }
                         }
-
-                        for ($i = 0; $i < sizeOf($match_players_arr); $i++) {
-
-                            if ($match_players_arr[$keys2[$i]]["player_name"] == $player_name) {
-                                $positon = $match_players_arr[$keys2[$i]]["position"];
-                            }
-                        }
-
-                        $player_item = array(
-                            "id" => $id,
-                            "player_name" => $player_name,
-                            "player_no" => $player_no,
-                            "player_image" => $player_image,
-                            "team_name" => $team_name,
-                            "average_rating" => $player_rating,
-                            "position" => $positon
-                        );
-
-                        array_push($players_arr, $player_item);
                     }
+
+                    for ($i = 0; $i < sizeOf($match_players_arr); $i++) {
+
+                        if ($match_players_arr[$keys2[$i]]["player_name"] == $player_name) {
+                            $positon = $match_players_arr[$keys2[$i]]["position"];
+                        }
+                    }
+
+                    $player_item = array(
+                        "id" => $id,
+                        "player_name" => $player_name,
+                        "player_no" => $player_no,
+                        "player_image" => $player_image,
+                        "team_name" => $team_name,
+                        "player_role" =>$player_role,
+                        "average_rating" => $player_rating,
+                        "position" => $positon
+                    );
+
+                    array_push($players_arr, $player_item);
                 }
-
-                $team_arr = array(
-                    "id" => $team->id,
-                    "team_name" => $team->team_name,
-                    "crest" => $team->crest,
-                    "manager" => $team->manager,
-                    "players" => $players_arr);
-
-                array_push($match_arr["teams"], $team_arr);
             }
 
+            $team_arr = array(
+                "id" => $team->id,
+                "team_name" => $team->team_name,
+                "crest" => $team->crest,
+                "manager" => $team->manager,
+                "players" => $players_arr);
 
-            http_response_code(200);
-
-            // make it json format
-
-            echo json_encode($match_arr);
+            array_push($match_arr["teams"], $team_arr);
         }
-    } else {
-        // set response code - 404 Not found
-        http_response_code(404);
 
-        // tell the user player does not exist
-        echo json_encode(array("message" => "Match does not exist."));
+
+        http_response_code(200);
+
+        // make it json format
+
+        echo json_encode($match_arr);
     }
+} else {
+    // set response code - 404 Not found
+    http_response_code(404);
+
+    // tell the user player does not exist
+    echo json_encode(array("message" => "Match does not exist."));
+}
 ?>

@@ -27,6 +27,7 @@ $player->id = $data->id;
     // set player property values
     $player->player_name = $data->player_name;
     $player->player_no = $data->player_no;
+    $player->player_role = $data->player_role;
     $player->player_image = $data->player_image;
     $player->team_id = $data->team_id;
  

@@ -26,12 +26,6 @@ if($data->match_id !=null){
 }
 
 
-if($data->event_id !=null){
-    $match_event->event_id = $data->event_id;
-}else
-{
-    $match_event->event_id = -1;
-}
 // query match_events
 $stmt = $match_event->search();
 $num = $stmt->rowCount();
@@ -55,8 +49,9 @@ if($num>0){
         $match_event_item=array(
             "id" => $id,
             "match_id" => $match_id,
-            "player_id" => $player_name,
+            "player_id" => $player_id,
             "event_id" => $event_id,
+            "event" =>$event,
             "team_id" => $team_id,
             "date_time" =>$date_time
         );

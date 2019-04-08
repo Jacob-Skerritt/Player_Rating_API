@@ -28,6 +28,9 @@ $team->id = $data->id;
     $team->team_name = $data->team_name;
     $team->crest = $data->crest;
     $team->manager = $data->manager;
+    $team->home_colours = $data->home_colours;
+    $team->away_colours =$data->away_colours;
+    $team->alt_colours =$data->alt_colours;
  
 // update the team
 if($team->update()){

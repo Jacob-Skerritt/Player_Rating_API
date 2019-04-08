@@ -10,6 +10,9 @@ class Team {
     public $team_name;
     public $crest;
     public $manager;
+    public $home_colours;
+    public $away_colours;
+    public $alt_colours;
 
 
     // constructor with $db as database connection
@@ -44,7 +47,7 @@ class Team {
         $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-                team_name=:team_name, crest=:crest, manager=:manager";
+                team_name=:team_name, crest=:crest, manager=:manager, home_colours=:home_colours, away_colours=:away_colours, alt_colours=:alt_colours";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -53,11 +56,16 @@ class Team {
         $this->team_name = htmlspecialchars(strip_tags($this->team_name));
         $this->crest = htmlspecialchars(strip_tags($this->crest));
         $this->manager = htmlspecialchars(strip_tags($this->manager));
+        $this->home_colours = htmlspecialchars(strip_tags($this->home_colours));
+        $this->away_colours = htmlspecialchars(strip_tags($this->away_colours));
+        $this->alt_colours = htmlspecialchars(strip_tags($this->alt_colours));
         // bind values
         $stmt->bindParam(":team_name", $this->team_name);
         $stmt->bindParam(":crest", $this->crest);
         $stmt->bindParam(":manager", $this->manager);
-
+        $stmt->bindParam(":home_colours", $this->home_colours);
+        $stmt->bindParam(":away_colours", $this->away_colours);
+        $stmt->bindParam(":alt_colours", $this->alt_colours);
         // execute query
         if ($stmt->execute()) {
             return true;
@@ -95,6 +103,9 @@ function readOne(){
     $this->team_name = $row['team_name'];
     $this->crest = $row['crest'];
     $this->manager = $row['manager'];
+    $this->home_colours =$row['home_colours'];
+    $this->away_colours =$row['away_colours'];
+    $this->alt_colours =$row['alt_colours'];
 
 }
 
@@ -105,11 +116,14 @@ function update(){
             "UPDATE
             ". $this->table_name ."
             SET
-            team_name = :team_name,
-            crest = :crest,
-            manager = :manager
+            team_name =:team_name,
+            crest =:crest,
+            manager =:manager,
+            home_colours =:home_colours,
+            away_colours =:away_colours,
+            alt_colours =:alt_colours
             WHERE
-            id = :id";
+            id =:id";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);
@@ -118,11 +132,18 @@ function update(){
     $this->team_name=htmlspecialchars(strip_tags($this->team_name));
     $this->crest=htmlspecialchars(strip_tags($this->crest));
     $this->manager=htmlspecialchars(strip_tags($this->manager));
+    $this->home_colours = htmlspecialchars(strip_tags($this->home_colours));
+    $this->away_colours = htmlspecialchars(strip_tags($this->away_colours));
+    $this->alt_colours = htmlspecialchars(strip_tags($this->alt_colours));
     $this->id=htmlspecialchars(strip_tags($this->id));
+
     // bind new values
     $stmt->bindParam(':team_name', $this->team_name);
     $stmt->bindParam(':crest', $this->crest);
     $stmt->bindParam(':manager', $this->manager);
+    $stmt->bindParam(":home_colours", $this->home_colours);
+    $stmt->bindParam("away_colours", $this->away_colours);
+    $stmt->bindParam("alt_colours", $this->alt_colours);
     $stmt->bindParam(':id', $this->id);
     
     // execute the query

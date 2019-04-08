@@ -44,7 +44,10 @@ if($num>0){
             "id" => $id,
             "team_name" => $team_name,
             "crest" => $crest,
-            "manager" => $manager
+            "manager" => $manager,
+            "home_colours" =>$home_colours,
+            "away_colours" =>$away_colours,
+            "alt_colours" =>$alt_colours
         );
  
         array_push($teams_arr["records"], $team_item);

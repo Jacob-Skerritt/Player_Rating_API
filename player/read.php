@@ -38,6 +38,7 @@ if($num>0){
             "id" => $id,
             "player_name" => $player_name,
             "player_no" => $player_no,
+            "player_role" => $player_role,
             "player_image" => $player_image,
             "team_name" => $team_name
         );

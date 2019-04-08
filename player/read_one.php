@@ -29,6 +29,7 @@ if($player->player_name!=null){
         "id" =>  $player->id,
         "player_name" => $player->player_name,
         "player_no" => $player->player_no,
+        "player_role" => $player ->player_role,
         "player_image" => $player->player_image,
         "team_name" => $player->team_name
  
