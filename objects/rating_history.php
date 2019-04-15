@@ -10,7 +10,7 @@ class Rating_History {
     public $match_id;
     public $player_id;
     public $rating;
-    public $user_id;
+    public $username;
     public $date_time;
 
 
@@ -20,7 +20,7 @@ class Rating_History {
     }
     
     function get_average_ratings(){
-        $query = "SELECT player_id, rating, user_id FROM
+        $query = "SELECT player_id, rating, username FROM
                 " . $this->table_name . "
                     Where
                         match_id = ?
@@ -43,7 +43,7 @@ class Rating_History {
             FROM
                 " . $this->table_name . " 
             ORDER BY
-                match_id DESC";
+                match_id ASC";
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
@@ -61,7 +61,7 @@ class Rating_History {
         $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-                match_id=:match_id, player_id=:player_id, rating=:rating, user_id=:user_id";
+                match_id=:match_id, player_id=:player_id, rating=:rating, username=:username";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -70,12 +70,12 @@ class Rating_History {
         $this->match_id = htmlspecialchars(strip_tags($this->match_id));
         $this->player_id = htmlspecialchars(strip_tags($this->player_id));
         $this->rating = htmlspecialchars(strip_tags($this->rating));
-        $this->user_id = html_entity_decode(strip_tags($this->user_id));
+        $this->username = html_entity_decode(strip_tags($this->username));
         // bind values
         $stmt->bindParam(":match_id", $this->match_id);
         $stmt->bindParam(":player_id", $this->player_id);
         $stmt->bindParam(":rating", $this->rating);
-        $stmt->bindParam(":user_id", $this->user_id);
+        $stmt->bindParam(":username", $this->username);
 
         // execute query
         if ($stmt->execute()) {
@@ -114,7 +114,7 @@ function readOne(){
     $this->match_id = $row['match_id'];
     $this->player_id = $row['player_id'];
     $this->rating = $row['rating'];
-    $this->user_id =$row['user_id'];
+    $this->username =$row['username'];
     $this->date_time =$row['date_time'];
 
 }
@@ -129,7 +129,7 @@ function update(){
             match_id = :match_id,
             player_id = :player_id,
             rating = :rating,
-            user_id =:user_id
+            username =:username
             WHERE
             id = :id";
  
@@ -140,13 +140,13 @@ function update(){
     $this->match_id=htmlspecialchars(strip_tags($this->match_id));
     $this->player_id=htmlspecialchars(strip_tags($this->player_id));
     $this->rating=htmlspecialchars(strip_tags($this->rating));
-    $this->user_id =htmlspecialchars(strip_tags($this->user_id));
+    $this->username =htmlspecialchars(strip_tags($this->username));
     $this->id=htmlspecialchars(strip_tags($this->id));
     // bind new values
     $stmt->bindParam(':match_id', $this->match_id);
     $stmt->bindParam(':player_id', $this->player_id);
     $stmt->bindParam(':rating', $this->rating);
-    $stmt->bindParam(':user_id', $this->user_id);
+    $stmt->bindParam(':username', $this->username);
     $stmt->bindParam(':id', $this->id);
     
     // execute the query
@@ -222,7 +222,7 @@ public function readPaging($from_record_num, $records_per_page){
                 *
             FROM
                 " . $this->table_name . " 
-            ORDER BY match_id DESC
+            ORDER BY match_id ASC
             LIMIT ?, ?";
  
     // prepare query statement

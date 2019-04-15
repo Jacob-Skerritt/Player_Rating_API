@@ -21,17 +21,17 @@ $rating = new Rating($db);
 $data = json_decode(file_get_contents("php://input"));
 $rating->match_id = $data->match_id; 
 $rating->player_id = $data->player_id;
-$rating->user_id = $data->user_id;
+$rating->username = $data->username;
 // read the details of player to be edited
 $rating->readOne();
  
-if($rating->match_id!=null && $rating->user_id!=null && $rating->player_id!=null){
+if($rating->match_id!=null && $rating->username!=null && $rating->player_id!=null){
     // create array
     $rating_arr = array(
         "match_id" => $rating->match_id,
         "player_id" => $rating->player_id,
         "rating" => $rating->rating,
-        "user_id" =>$rating->user_id,
+        "username" =>$rating->username,
         "date_time" =>$rating->date_time
  
     );

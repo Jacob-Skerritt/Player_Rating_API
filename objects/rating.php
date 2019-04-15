@@ -9,7 +9,7 @@ class Rating {
     public $match_id;
     public $player_id;
     public $rating;
-    public $user_id;
+    public $username;
     public $date_time;
 
     // constructor with $db as database connection
@@ -18,7 +18,7 @@ class Rating {
     }
 
     function get_average_ratings() {
-        $query = "SELECT player_id, rating, user_id FROM
+        $query = "SELECT player_id, rating, username FROM
                 " . $this->table_name . "
                     Where
                         match_id = ?
@@ -57,11 +57,11 @@ class Rating {
 
         // select all query
         $query = "SELECT
-                user_id, COUNT(*) as count
+                username, COUNT(*) as count
             FROM
                 " . $this->table_name . " 
             GROUP BY
-                user_id ASC";
+                username ASC";
         
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -80,7 +80,7 @@ class Rating {
         $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-                match_id=:match_id, player_id=:player_id, rating=:rating, user_id=:user_id";
+                match_id=:match_id, player_id=:player_id, rating=:rating, username=:username";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -89,12 +89,12 @@ class Rating {
         $this->match_id = htmlspecialchars(strip_tags($this->match_id));
         $this->player_id = htmlspecialchars(strip_tags($this->player_id));
         $this->rating = htmlspecialchars(strip_tags($this->rating));
-        $this->user_id = html_entity_decode(strip_tags($this->user_id));
+        $this->username = html_entity_decode(strip_tags($this->username));
         // bind values
         $stmt->bindParam(":match_id", $this->match_id);
         $stmt->bindParam(":player_id", $this->player_id);
         $stmt->bindParam(":rating", $this->rating);
-        $stmt->bindParam(":user_id", $this->user_id);
+        $stmt->bindParam(":username", $this->username);
 
         // execute query
         if ($stmt->execute()) {
@@ -112,7 +112,7 @@ class Rating {
             FROM
                 " . $this->table_name . " 
             WHERE
-                match_id = ? AND user_id = ? AND player_id = ?
+                match_id = ? AND username = ? AND player_id = ?
             LIMIT
                 0,1";
 
@@ -121,7 +121,7 @@ class Rating {
 
         // bind id of players to be updated
         $stmt->bindParam(1, $this->match_id);
-        $stmt->bindParam(2, $this->user_id);
+        $stmt->bindParam(2, $this->username);
         $stmt->bindParam(3, $this->player_id);
 
 
@@ -135,23 +135,23 @@ class Rating {
         $this->match_id = $row['match_id'];
         $this->player_id = $row['player_id'];
         $this->rating = $row['rating'];
-        $this->user_id = $row['user_id'];
+        $this->username = $row['username'];
         $this->date_time = $row['date_time'];
     }
 
 // update the ratings
-    function update($match_id_to_change, $user_id_to_change, $player_id_to_change) {
+    function update($match_id_to_change, $username_to_change, $player_id_to_change) {
         // update query
         $query = "UPDATE
             " . $this->table_name . "
             SET
             match_id=:match_id,
             player_id=:player_id,
-            user_id=:user_id,
+            username=:username,
             rating=:rating
 
             WHERE
-            match_id=:match_id_to_change AND user_id=:user_id_to_change AND player_id=:player_id_to_change";
+            match_id=:match_id_to_change AND username=:username_to_change AND player_id=:player_id_to_change";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -160,14 +160,14 @@ class Rating {
         $this->match_id = htmlspecialchars(strip_tags($this->match_id));
         $this->player_id = htmlspecialchars(strip_tags($this->player_id));
         $this->rating = htmlspecialchars(strip_tags($this->rating));
-        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+        $this->username = htmlspecialchars(strip_tags($this->username));
         // bind new values
         $stmt->bindParam(':match_id', $this->match_id);
         $stmt->bindParam(':player_id', $this->player_id);
         $stmt->bindParam(':rating', $this->rating);
-        $stmt->bindParam(':user_id', $this->user_id);
+        $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':match_id_to_change', $match_id_to_change);
-        $stmt->bindParam(':user_id_to_change', $user_id_to_change);
+        $stmt->bindParam(':username_to_change', $username_to_change);
         $stmt->bindParam(':player_id_to_change', $player_id_to_change);
 
 
@@ -182,19 +182,19 @@ class Rating {
     function delete() {
 
         // delete query
-        $query = "DELETE FROM " . $this->table_name . " WHERE match_id = ? AND user_id = ? AND player_id = ?";
+        $query = "DELETE FROM " . $this->table_name . " WHERE match_id = ? AND username = ? AND player_id = ?";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
 
         // sanitize
         $this->match_id = htmlspecialchars(strip_tags($this->match_id));
-        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+        $this->username = htmlspecialchars(strip_tags($this->username));
         $this->player_id = htmlspecialchars(strip_tags($this->player_id));
 
         // bind id of record to delete
         $stmt->bindParam(1, $this->match_id);
-        $stmt->bindParam(2, $this->user_id);
+        $stmt->bindParam(2, $this->username);
         $stmt->bindParam(3, $this->player_id);
 
 
@@ -268,7 +268,7 @@ class Rating {
             FROM
                 " . $this->table_name . " 
             WHERE
-                user_id = ? AND match_id = ?
+                username = ? AND match_id = ?
             ORDER BY
                 player_id ASC";
 
@@ -277,9 +277,9 @@ class Rating {
 
         // sanitize
         $this->match_id = htmlspecialchars(strip_tags($this->match_id));
-        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+        $this->username = htmlspecialchars(strip_tags($this->username));
         // bind
-        $stmt->bindParam(1, $this->user_id);
+        $stmt->bindParam(1, $this->username);
         $stmt->bindParam(2, $this->match_id);
 
 

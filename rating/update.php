@@ -22,7 +22,7 @@ $rating = new Rating($db);
 $data = json_decode(file_get_contents("php://input"));
 
 $match_id_to_change = $data->match_id_to_change;
-$user_id_to_change= $data->user_id_to_change;
+$username_to_change= $data->username_to_change;
 $player_id_to_change= $data->player_id_to_change;
 
 
@@ -30,10 +30,10 @@ $player_id_to_change= $data->player_id_to_change;
 $rating->match_id = $data->match_id;
 $rating->player_id = $data->player_id;
 $rating->rating = $data->rating;
-$rating->user_id = $data->user_id;
+$rating->username = $data->username;
 
 // update the rating
-if ($rating->update($match_id_to_change, $user_id_to_change, $player_id_to_change)) {
+if ($rating->update($match_id_to_change, $username_to_change, $player_id_to_change)) {
 
     // set response code - 200 ok
     http_response_code(200);

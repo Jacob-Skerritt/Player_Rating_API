@@ -35,7 +35,7 @@ if($num>0){
         extract($row);
  
         $rating_item=array(
-            "user_id" => $user_id,
+            "username" => $username,
             "count" => $count
         );
  

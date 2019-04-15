@@ -20,16 +20,14 @@ $user = new User($db);
 // get id of user to be edited
 $data = json_decode(file_get_contents("php://input"));
  
-// set ID property of user to be edited
-$user->id = $data->id;
  
 
 // set user property values
 $user->username = $data->username;
-
+$username_to_change = $data->username_to_change;
  
 // update the user
-if($user->update()){
+if($user->update($username_to_change)){
  
     // set response code - 200 ok
     http_response_code(200);

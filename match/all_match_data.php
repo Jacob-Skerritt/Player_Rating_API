@@ -58,7 +58,6 @@ if ($match->id != null) {
         "team1_score" => $team1_score,
         "team2_score" => $team2_score,
         "teams" => array(),
-        "users" => array(),
         "user_ratings" => array(),
         "events" => array()
     );
@@ -86,7 +85,7 @@ if ($match->id != null) {
         $match_event->match_id = $data->id;
 
         $stmtMatchEvent = $match_event->search();
-
+        
 
         // match_events array
 
@@ -153,28 +152,7 @@ if ($match->id != null) {
  
         array_push($match_arr["events"], $substitution_item);
     }
-        
-        $stmtUser = $users->read();
 
-
-// check if more than 0 record found
-        // users array
-        // retrieve our table contents
-        // fetch() is faster than fetchAll()
-        // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
-        while ($row = $stmtUser->fetch(PDO::FETCH_ASSOC)) {
-            // extract row
-            // this will make $row['name'] to
-            // just $name only
-            extract($row);
-
-            $user_item = array(
-                "id" => $id,
-                "username" => $username
-            );
-
-            array_push($match_arr["users"], $user_item);
-        }
 
 
         $ratings->match_id = $match->id;
@@ -224,9 +202,9 @@ if ($match->id != null) {
         }
         
 
-
+        if(array_key_exists('username', $data)){
         $ratings->match_id = $data->id;
-        $ratings->user_id = $data->user_id;
+        $ratings->username = $data->username;
         $stmtSearchUser = $ratings->searchUser();
         $numSearchUser = $stmt->rowCount();
 
@@ -247,13 +225,15 @@ if ($match->id != null) {
                     "match_id" => $match_id,
                     "player_id" => $player_id,
                     "rating" => $rating,
-                    "user_id" => $user_id,
+                    "username" => $username,
                     "date_time" => $date_time
                 );
 
                 array_push($match_arr["user_ratings"], $rating_item);
             }
         }
+        
+            }
 
 
         $match_player->match_id = $data->id;

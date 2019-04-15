@@ -28,7 +28,7 @@ $rating->id = $data->id;
     $rating->match_id = $data->match_id;
     $rating->player_id = $data->player_id;
     $rating->rating = $data->rating;
-    $rating->user_id = $data->user_id;
+    $rating->username = $data->username;
  
 // update the rating
 if($rating->update()){

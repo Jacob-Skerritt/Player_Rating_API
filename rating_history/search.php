@@ -20,9 +20,6 @@ $data = json_decode(file_get_contents("php://input"));
 
     $ratings->match_id = $data->match_id;
     $ratings->player_id = $data->player_id;
-    echo $ratings->match_id;
-    echo " ";
-    echo  $ratings->player_id;
 
 // query ratings
 $stmt = $ratings->search();
@@ -49,7 +46,7 @@ if($num>0){
             "match_id" => $match_id,
             "player_id" => $player_id,
             "rating" => $rating,
-            "user_id" => $user_id,
+            "username" => $username,
             "date_time" =>$date_time
         );
  

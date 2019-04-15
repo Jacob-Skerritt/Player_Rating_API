@@ -18,33 +18,27 @@ $user = new User($db);
 // get keywords
 $data = json_decode(file_get_contents("php://input"));
 
-if($data->id !=null){
-$user->id = $data->id;}
-else
-{
-    $user=-1;
+
+
+if($data->uuid_timestamp == null){
+        http_response_code(400);
+ 
+    // tell the user
+    echo json_encode(array("message" => "Unable to find user. Data is incomplete."));
 }
 
-if($data->username != null){
-    $user->username = $data->username;
-}
-else{
-    $user->username = "N/A";
-}
 
-if($data->uuid_timestamp !=null){
-    $user->uuid_timestamp =$data->uuid_timestamp;
-}
-else{
-    $user->uuid_timestmap = "N/A";
-}
-
-// query users
+$user->uuid_timestamp = $data->uuid_timestamp;
 $stmt = $user->search();
 $num = $stmt->rowCount();
  
 // check if more than 0 record found
 if($num>0){
+    
+    
+    
+    // query users
+
  
     // users array
     $users_arr=array();
@@ -60,7 +54,6 @@ if($num>0){
         extract($row);
  
         $user_item=array(
-            "id" => $id,
             "username" => $username,
             "uuid_timestmap" => $uuid_timestamp
         );

@@ -22,7 +22,7 @@ $data = json_decode(file_get_contents("php://input"));
  
 // set rating id to be deleted
 $rating->match_id = $data->match_id;
-$rating->user_id = $data->user_id;
+$rating->username = $data->username;
 $rating->player_id = $data->player_id;
  
 // delete the rating

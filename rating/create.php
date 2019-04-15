@@ -25,14 +25,14 @@ if(
     !empty($data->match_id) &&
     !empty($data->player_id) &&
     !empty($data->rating) &&
-    !empty($data->user_id) 
+    !empty($data->username) 
 ){
  
     // set rating  property values
     $rating->match_id = $data->match_id;
     $rating->player_id = $data->player_id;
     $rating->rating = $data->rating;
-    $rating->user_id =$data->user_id;
+    $rating->username =$data->username;
     
 
  

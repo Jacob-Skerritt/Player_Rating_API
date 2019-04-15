@@ -18,8 +18,8 @@ $ratings = new Rating($db);
 // get keywords
 $data = json_decode(file_get_contents("php://input"));
 
-    $ratings->match_id = $data->id;
-    $ratings->user_id = $data->user_id;
+    $ratings->match_id = $data->match_id;
+    $ratings->username = $data->username;
 // query ratings
 $stmt = $ratings->searchUser();
 $num = $stmt->rowCount();
@@ -43,7 +43,7 @@ if($num>0){
             "match_id" => $match_id,
             "player_id" => $player_id,
             "rating" => $rating,
-            "user_id" => $user_id,
+            "username" => $username,
             "date_time" =>$date_time
         );
  

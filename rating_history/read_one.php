@@ -30,7 +30,7 @@ if($rating->id!=null){
         "match_id" => $rating->match_id,
         "player_id" => $rating->player_id,
         "rating" => $rating->rating,
-        "user_id" =>$rating->user_id,
+        "username" =>$rating->username,
         "date_time" =>$rating->date_time
  
     );

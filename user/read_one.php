@@ -20,24 +20,21 @@ $user = new User($db);
 // set ID property of record to read
 $data = json_decode(file_get_contents("php://input"));
 
-if($data->id != null){
-$user->id = $data->id;}
-else{
-    $user->id = 0;
-}
 
-if($data->username != null){
-$user->username = $data->username;}
-else{
-    $username = "N/A";
-}
-// read the details of player to be edited
-$user->readOne();
+
+if($data->username == null){
+    http_response_code(400);
  
-if($user->username!=null){
+    // tell the user
+    echo json_encode(array("message" => "Unable to located user. Data is incomplete."));
+
+
+}
+else if($data->username!=null){
+    $user->username = $data->username;
+    $user->readOne();
     // create array
     $user_arr = array(
-        "id" =>  $user->id,
         "username" => $user->username,
         "uuid_timestamp" => $user->uuid_timestamp
  

@@ -35,7 +35,6 @@ if($num>0){
         extract($row);
  
         $user_item=array(
-            "id" => $id,
             "username" => $username,
             "uuid_timestmap" => $uuid_timestamp
         );

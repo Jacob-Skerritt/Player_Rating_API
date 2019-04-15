@@ -21,37 +21,37 @@ $user = new User($db);
 $data = json_decode(file_get_contents("php://input"));
  
 // set user id to be deleted
-if($data->id != null){
-$user->id = $data->id;}
-else{
-    $user->id = 0;
-}
 
-if($data->username != null){
-    $user->username = $data->username;
-}else{
-    $user->username = "N/A";
-}
-echo $user->id ;
-echo $user->username;
- 
-// delete the user
-if($user->delete()){
- 
-    // set response code - 200 ok
-    http_response_code(200);
+
+
+if($data->username == null){
+        http_response_code(400);
  
     // tell the user
-    echo json_encode(array("message" => "User was deleted."));
+    echo json_encode(array("message" => "Unable to delete user. Data is incomplete."));
 }
- 
-// if unable to delete the user
-else{
- 
-    // set response code - 503 service unavailable
-    http_response_code(503);
- 
-    // tell the user
-    echo json_encode(array("message" => "Unable to delete user."));
+else if($data->username !=null){
+    $user->username =$data->username;
+    
+        if($user->delete()){
+
+
+        // set response code - 200 ok
+        http_response_code(200);
+
+        // tell the user
+        echo json_encode(array("message" => "User was deleted."));
+    }
+
+    // if unable to delete the user
+    else{
+
+        // set response code - 503 service unavailable
+        http_response_code(503);
+
+        // tell the user
+        echo json_encode(array("message" => "Unable to delete user."));
+    }
+
 }
 ?>

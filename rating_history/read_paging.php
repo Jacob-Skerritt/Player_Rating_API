@@ -45,7 +45,7 @@ if($num>0){
             "match_id" => $match_id,
             "player_id" => $player_id,
             "rating" => $rating,
-            "user_id" =>$user_id,
+            "username" =>$username,
             "date_time" =>$date_time
         );
  

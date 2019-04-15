@@ -15,7 +15,7 @@ $db = $database->getConnection();
 $data =  json_decode(file_get_contents("php://input"));
 // initialize object
 $ratings = new Rating($db);
-$ratings->match_id = $data->id;
+$ratings->match_id = $data->match_id;
 // query ratings
 $stmt = $ratings->get_average_ratings();
 $num = $stmt->rowCount();
