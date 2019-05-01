@@ -31,7 +31,7 @@ if($match_event->match_id!=null){
         "player_id" => $match_event->player_id,
         "event_id" => $match_event->event_id,
         "team_id" => $match_event->team_id,
-        "date_time" =>$match_event->date_time
+        "time" =>$match_event->time
  
     );
  

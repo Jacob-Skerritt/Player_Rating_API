@@ -46,7 +46,7 @@ if($num>0){
             "player_id" => $player_id,
             "event_id" => $event_id,
             "team_id" => $team_id,
-            "date_time" =>$date_time
+            "time" =>$time
         );
  
         array_push($match_events_arr["records"], $match_event_item);

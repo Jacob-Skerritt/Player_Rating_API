@@ -11,7 +11,7 @@ class Match_event{
     public $event_id;
     public $player_id;
     public $team_id;
-    public $date_time;
+    public $time;
 
     // constructor with $db as database connection
     public function __construct($db) {
@@ -23,7 +23,7 @@ class Match_event{
 
         // select all query
         $query = "SELECT
-               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.date_time
+               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.time
             FROM
                 " . $this->table_name . " me
                 LEFT JOIN
@@ -54,7 +54,7 @@ class Match_event{
         $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-                match_id=:match_id, event_id=:event_id, player_id=:player_id, team_id=:team_id";
+                match_id=:match_id, event_id=:event_id, player_id=:player_id, team_id=:team_id, time=:time";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -64,11 +64,13 @@ class Match_event{
         $this->event_id = htmlspecialchars(strip_tags($this->event_id));
         $this->player_id = htmlspecialchars(strip_tags($this->player_id));
         $this->team_id = htmlspecialchars(strip_tags($this->team_id));
+        $this->time = htmlspecialchars(strip_tags($this->time));
         // bind values
         $stmt->bindParam(":match_id", $this->match_id);
         $stmt->bindParam(":event_id", $this->event_id);
         $stmt->bindParam(":player_id", $this->player_id);
         $stmt->bindParam(":team_id", $this->team_id);
+        $stmt->bindParam(":time", $this->time);
 
         // execute query
         if ($stmt->execute()) {
@@ -83,7 +85,7 @@ function readOne(){
  
     // query to read single record
         $query = "SELECT
-               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.date_time
+               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.time
             FROM
                 " . $this->table_name . " me
                 LEFT JOIN
@@ -117,7 +119,7 @@ function readOne(){
     $this->event_id = $row['event'];
     $this->player_id = $row['player_name'];
     $this->team_id = $row['team_name'];
-    $this->date_time = $row['date_time'];
+    $this->time = $row['time'];
 
 }
 
@@ -188,7 +190,7 @@ function search(){
  
     // select all query
         $query = "SELECT
-               me.id, me.match_id, me.player_id, me.event_id, e.event, me.team_id, me.date_time
+               me.id, me.match_id, me.player_id, me.event_id, e.event, me.team_id, me.time
             FROM
                 " . $this->table_name . " me
                 LEFT JOIN 
@@ -219,7 +221,7 @@ public function readPaging($from_record_num, $records_per_page){
  
     // select query
         $query = "SELECT
-               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.date_time
+               me.id, me.match_id, p.player_name, e.event, t.team_name as team_name, me.time
             FROM
                 " . $this->table_name . " me
                 LEFT JOIN

@@ -1,5 +1,13 @@
 <?php
 
+/* 
+ * The following is a large api pull that will gather and consolidate all information relevant to a single game
+ * The applicaiton will call the api passing in the match_id of said match and this will reply with all relevant information in json format
+ * The large data consolidation is inefficient and should not be used if the application was to progress past the testing stage
+ * That said,  the consolidation of all the data works perfectly fine for testing purposes.
+ *  */
+
+
 // required headers
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: access");
@@ -25,7 +33,7 @@ include_once '../objects/substitution.php';
 $database = new Database();
 $db = $database->getConnection();
 
-// prepare player object
+// prepare objects
 $match = new Match($db);
 $match_team = new Match_Team($db);
 $team = new Team($db);
@@ -38,17 +46,17 @@ $event = new Event($db);
 $substitution = new Substitution($db);
 
 
-// set ID property of record to read
+// set match id property of the record to read, intialise team scores
 $data = json_decode(file_get_contents("php://input"));
 $match->id = $data->id;
 $team1_score = 0;
 $team2_score = 0;
 
-// read the details of player to be edited
+// read the details of match
 $match->readOne();
 
 if ($match->id != null) {
-    // create array
+    // creating the main object for all information of the game
     $match_arr = array(
         "id" => $match->id,
         "match_date_time" => $match->match_date_time,
@@ -66,7 +74,7 @@ if ($match->id != null) {
 
 
 
-
+    //Searching for the teams that will be particiapting in the match, adding them to an array the will be used later
     $match_team->match_id = $match->id;
     $stmt = $match_team->search();
     $num = $stmt->rowCount();
@@ -81,13 +89,10 @@ if ($match->id != null) {
             $match_teams[] = $team_id;
         }
 
-
+        //Getting any and all events for the match, generating the scores for each team if goals are present, adding all events to the an array in the main object
         $match_event->match_id = $data->id;
 
         $stmtMatchEvent = $match_event->search();
-        
-
-        // match_events array
 
         
         while ($rowMatchEvent = $stmtMatchEvent->fetch(PDO::FETCH_ASSOC)) {
@@ -96,6 +101,7 @@ if ($match->id != null) {
             // just $name only
             extract($rowMatchEvent);
             
+            //Deteriming the scores for both teams, accomodating the possability of own goals
             if($event_id ==3){
                 if ($team_id == $match_teams[0]) {
                 $team1_score++;
@@ -121,17 +127,19 @@ if ($match->id != null) {
             "event_id" => $event_id,
             "event" =>$event,
             "team_id" => $team_id,
-            "date_time" =>$date_time
+            "time" =>$time
         );
             
             array_push($match_arr["events"], $match_event_item);
             
         }
-
+            
+        //pusing the score to the main array
         $match_arr["team1_score"] = $team1_score;
         $match_arr["team2_score"] = $team2_score;
         
         
+        //Determining if any substitutions have occured in game, if they have adding them to an array in the main object
         $substitution->match_id = $match->id;
         $stmtSubstitution = $substitution->search();
         
@@ -154,7 +162,7 @@ if ($match->id != null) {
     }
 
 
-
+        //Calculating the average rarings for all players present in the game, adding to an array in the main object if an average_rating can be calculated
         $ratings->match_id = $match->id;
         $stmt2 = $ratings->get_average_ratings();
         $num2 = $stmt2->rowCount();
@@ -197,12 +205,15 @@ if ($match->id != null) {
                 array_push($ratings_arr, $rating_item);
                 $count = 0;
             }
+            //generating all the keys for the ratings_arr array
             $keys = array_keys($ratings_arr);
             
         }
         
-
+        //Checking if a user has "logged" in
         if(array_key_exists('username', $data)){
+            
+        //if a user has logged in, find all ratings they made if any were made push them to the array in the main object
         $ratings->match_id = $data->id;
         $ratings->username = $data->username;
         $stmtSearchUser = $ratings->searchUser();
@@ -237,7 +248,9 @@ if ($match->id != null) {
 
 
         $match_player->match_id = $data->id;
-
+        
+        //Determining the position each player in the game will be in, adding them to an array
+        //Array will be used in the generation of the player objects for each team
         $stmt = $match_player->search();
         $num = $stmt->rowCount();
 
@@ -262,8 +275,12 @@ if ($match->id != null) {
 
             array_push($match_players_arr, $match_player_item);
         }
+        //generating the keys for the array match_players_arr
         $keys2 = array_keys($match_players_arr);
-
+        
+        //using the teams we retrieved earlier to read each team data and populate an object using said data
+        //Getting all players for each team, adding them to the team object and then pushing the object into an array in the main object
+        //this happens twice due to there being two teams in a game
         foreach ($match_teams as $teams) {
             $team->id = $teams;
             $team->readOne();

@@ -53,7 +53,7 @@ if($num>0){
             "event_id" => $event_id,
             "event" =>$event,
             "team_id" => $team_id,
-            "date_time" =>$date_time
+            "time" =>$time
         );
  
         array_push($match_events_arr["records"], $match_event_item);

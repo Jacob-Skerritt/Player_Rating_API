@@ -25,7 +25,8 @@ if(
     !empty($data->match_id) &&
     !empty($data->player_id) &&
     !empty($data->team_id) &&
-    !empty($data->event_id)
+    !empty($data->event_id) &&
+        !empty($data->time)
 ){
  
     // set match_event  property values
@@ -33,6 +34,7 @@ if(
     $match_event->player_id = $data->player_id;
     $match_event->event_id = $data->event_id;
     $match_event->team_id = $data->team_id;
+    $match_event->time =$data->time;
 
  
     // create the match_event
